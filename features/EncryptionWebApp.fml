@@ -1,0 +1,309 @@
+use productline EncryptionWebAppProductLine
+
+hdef featureset EncryptionWebAppFeatures
+  name "Encryption Web App Feature Set"
+  description "Feature model for web-based text encryption application with client-side cryptography, user interface, and security capabilities"
+  owner "Product Engineering Team"
+  tags "features", "encryption", "web-app", "client-side-crypto"
+  listedfor ref productline EncryptionWebAppProductLine
+
+  def feature CoreEncryption mandatory
+    name "Core Encryption Functionality"
+    description "Essential text encryption and cryptographic operations"
+    owner "Security Team"
+    tags "encryption", "crypto", "core-function"
+    safetylevel ASIL-B
+
+    def feature TextInput mandatory
+      name "Text Input Processing"
+      description "Capture and validate user text input for encryption"
+      owner "Frontend Team"
+      tags "input", "validation"
+      safetylevel ASIL-A
+
+    def feature CryptographicEngine mandatory
+      name "Cryptographic Engine"
+      description "Web Crypto API based encryption implementation"
+      owner "Security Team"
+      tags "crypto-engine", "web-crypto-api"
+      safetylevel ASIL-B
+
+      def feature AESEncryption mandatory
+        name "AES Encryption"
+        description "AES-GCM encryption implementation"
+        owner "Security Team"
+        tags "aes", "aes-gcm"
+        safetylevel ASIL-B
+
+      def feature KeyManagement mandatory
+        name "Key Management"
+        description "Cryptographic key generation and handling"
+        owner "Security Team"
+        tags "key-management", "security"
+        safetylevel ASIL-B
+
+    def feature OutputFormatting mandatory
+      name "Output Formatting"
+      description "Format and display encrypted output"
+      owner "Frontend Team"
+      tags "output", "formatting"
+      safetylevel ASIL-A
+
+  def feature UserInterfaceXXXXX mandatory
+    name "User Interface"
+    description "Web-based user interface for encryption application"
+    owner "UI/UX Team"
+    tags "ui", "interface", "web"
+    safetylevel ASIL-A
+
+    def feature InputForm mandatory
+      name "Input Form"
+      description "Form elements for text input and encryption controls"
+      owner "Frontend Team"
+      tags "form", "input-controls"
+      safetylevel ASIL-A
+
+    def feature OutputDisplay mandatory
+      name "Output Display"
+      description "Display area for encrypted text results"
+      owner "Frontend Team"
+      tags "output", "display"
+      safetylevel ASIL-A
+
+    def feature Styling mandatory
+      name "Visual Styling"
+      description "Tailwind CSS based styling and responsive design"
+      owner "UI/UX Team"
+      tags "styling", "tailwind", "responsive"
+      safetylevel ASIL-A
+
+    def feature CopyToClipboard optional
+      name "Copy to Clipboard"
+      description "One-click copy functionality for encrypted output"
+      owner "Frontend Team"
+      tags "clipboard", "copy", "ux-enhancement"
+      safetylevel ASIL-A
+
+  def feature SecurityFeatures mandatory
+    name "Security and Validation"
+    description "Security controls and input validation mechanisms"
+    owner "Security Team"
+    tags "security", "validation"
+    safetylevel ASIL-B
+
+    def feature InputValidation mandatory
+      name "Input Validation"
+      description "Validate and sanitize user input before processing"
+      owner "Security Team"
+      tags "validation", "sanitization"
+      safetylevel ASIL-B
+
+    def feature ErrorHandling mandatory
+      name "Error Handling"
+      description "Secure error handling and user feedback"
+      owner "Security Team"
+      tags "error-handling", "feedback"
+      safetylevel ASIL-B
+
+    def feature SecureMemoryHandling optional
+      name "Secure Memory Handling"
+      description "Clear sensitive data from memory after use"
+      owner "Security Team"
+      tags "memory", "security", "cleanup"
+      safetylevel ASIL-B
+
+  def feature Accessibility optional
+    name "Accessibility Features"
+    description "Web accessibility compliance and usability enhancements"
+    owner "UI/UX Team"
+    tags "accessibility", "a11y", "usability"
+    safetylevel ASIL-A
+
+    def feature KeyboardNavigation optional
+      name "Keyboard Navigation"
+      description "Full keyboard accessibility support"
+      owner "UI/UX Team"
+      tags "keyboard", "navigation", "a11y"
+      safetylevel ASIL-A
+
+    def feature ScreenReaderSupport optional
+      name "Screen Reader Support"
+      description "ARIA labels and screen reader compatibility"
+      owner "UI/UX Team"
+      tags "screen-reader", "aria", "a11y"
+      safetylevel ASIL-A
+
+  def feature PerformanceOptimization optional
+    name "Performance and Optimization"
+    description "Performance enhancements and optimization features"
+    owner "Performance Team"
+    tags "performance", "optimization", "efficiency"
+    safetylevel ASIL-A
+
+    def feature LazyLoading optional
+      name "Lazy Loading"
+      description "Load cryptographic libraries only when needed"
+      owner "Performance Team"
+      tags "lazy-loading", "performance", "optimization"
+      safetylevel ASIL-A
+
+    def feature Caching optional
+      name "Result Caching"
+      description "Cache encryption results for improved performance"
+      owner "Performance Team"
+      tags "caching", "performance", "optimization"
+      safetylevel ASIL-A
+
+    def feature ProgressiveEnhancement optional
+      name "Progressive Enhancement"
+      description "Graceful degradation for older browsers"
+      owner "Performance Team"
+      tags "progressive-enhancement", "compatibility", "performance"
+      safetylevel ASIL-A
+
+  def feature AdvancedEncryption optional
+    name "Advanced Encryption Options"
+    description "Extended encryption algorithms and configurations"
+    owner "Security Team"
+    tags "advanced-crypto", "algorithms", "configuration"
+    safetylevel ASIL-B
+
+    def feature MultipleAlgorithms optional
+      name "Multiple Encryption Algorithms"
+      description "Support for AES-128, AES-256, and ChaCha20"
+      owner "Security Team"
+      tags "algorithms", "aes-128", "aes-256", "chacha20"
+      safetylevel ASIL-B
+
+    def feature CustomKeySize optional
+      name "Custom Key Sizes"
+      description "User-configurable cryptographic key sizes"
+      owner "Security Team"
+      tags "key-size", "customization", "security"
+      safetylevel ASIL-B
+
+    def feature Compression optional
+      name "Data Compression"
+      description "Compress data before encryption to reduce size"
+      owner "Security Team"
+      tags "compression", "efficiency", "storage"
+      safetylevel ASIL-A
+
+  def feature UserExperience optional
+    name "User Experience Enhancements"
+    description "Advanced UX features and user convenience"
+    owner "UI/UX Team"
+    tags "ux", "convenience", "user-friendly"
+    safetylevel ASIL-A
+
+    def feature History optional
+      name "Encryption History"
+      description "Store and display recent encryption operations"
+      owner "UI/UX Team"
+      tags "history", "convenience", "user-friendly"
+      safetylevel ASIL-A
+
+    def feature Favorites optional
+      name "Favorite Configurations"
+      description "Save and reuse preferred encryption settings"
+      owner "UI/UX Team"
+      tags "favorites", "settings", "convenience"
+      safetylevel ASIL-A
+
+    def feature BatchProcessing optional
+      name "Batch Processing"
+      description "Process multiple text inputs simultaneously"
+      owner "UI/UX Team"
+      tags "batch", "efficiency", "bulk-processing"
+      safetylevel ASIL-A
+
+    def feature Templates optional
+      name "Encryption Templates"
+      description "Predefined encryption configurations for common use cases"
+      owner "UI/UX Team"
+      tags "templates", "presets", "convenience"
+      safetylevel ASIL-A
+
+  def feature DataManagement optional
+    name "Data Management and Export"
+    description "Data handling, storage, and export capabilities"
+    owner "Data Team"
+    tags "data-management", "export", "storage"
+    safetylevel ASIL-A
+
+    def feature ExportFormats optional
+      name "Multiple Export Formats"
+      description "Export encrypted data in various formats (JSON, XML, CSV)"
+      owner "Data Team"
+      tags "export", "formats", "data-exchange"
+      safetylevel ASIL-A
+
+    def feature LocalStorage optional
+      name "Local Storage"
+      description "Store encryption preferences and history locally"
+      owner "Data Team"
+      tags "local-storage", "persistence", "preferences"
+      safetylevel ASIL-A
+
+    def feature DataBackup optional
+      name "Data Backup and Restore"
+      description "Backup and restore user data and settings"
+      owner "Data Team"
+      tags "backup", "restore", "data-protection"
+      safetylevel ASIL-A
+
+  def feature Integration optional
+    name "External Integrations"
+    description "Integration with external services and APIs"
+    owner "Integration Team"
+    tags "integration", "apis", "external-services"
+    safetylevel ASIL-A
+
+    def feature CloudStorage optional
+      name "Cloud Storage Integration"
+      description "Save encrypted files to cloud storage services"
+      owner "Integration Team"
+      tags "cloud-storage", "file-management", "integration"
+      safetylevel ASIL-A
+
+    def feature APIAccess optional
+      name "API Access"
+      description "RESTful API for programmatic access to encryption services"
+      owner "Integration Team"
+      tags "api", "rest", "programmatic-access"
+      safetylevel ASIL-B
+
+    def feature WebhookSupport optional
+      name "Webhook Support"
+      description "Webhook notifications for encryption events"
+      owner "Integration Team"
+      tags "webhooks", "notifications", "events"
+      safetylevel ASIL-A
+
+  def feature Monitoring optional
+    name "Monitoring and Analytics"
+    description "Application monitoring, logging, and analytics"
+    owner "DevOps Team"
+    tags "monitoring", "analytics", "logging"
+    safetylevel ASIL-A
+
+    def feature UsageAnalytics optional
+      name "Usage Analytics"
+      description "Track and analyze user behavior and feature usage"
+      owner "DevOps Team"
+      tags "analytics", "usage-tracking", "insights"
+      safetylevel ASIL-A
+
+    def feature PerformanceMonitoring optional
+      name "Performance Monitoring"
+      description "Monitor application performance and identify bottlenecks"
+      owner "DevOps Team"
+      tags "performance-monitoring", "metrics", "optimization"
+      safetylevel ASIL-A
+
+    def feature SecurityAudit optional
+      name "Security Audit Logging"
+      description "Log security-related events for audit purposes"
+      owner "DevOps Team"
+      tags "security-audit", "logging", "compliance"
+      safetylevel ASIL-B

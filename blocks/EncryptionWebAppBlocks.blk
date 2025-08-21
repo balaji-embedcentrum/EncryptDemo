@@ -1,0 +1,87 @@
+// EncryptionWebAppBlocks.blk - Block definitions for encryption web app
+use featureset EncryptionWebAppFeatures
+
+hdef block EncryptionWebAppBlocks
+  name "Encryption Web App System Blocks"
+  description "System architecture blocks for encryption web application with interfaces and relationships"
+  designrationale "Modular block architecture enables clear separation of concerns and maintainable system design"
+  owner "Systems Architecture Team"
+  level system
+  safetylevel ASIL-B
+  tags "encryption", "web-app", "system-architecture", "blocks"
+
+  // Block relationships - at hdef level
+  composedof ref block UserInterface, InputValidator, CryptographicEngine, KeyManager, OutputFormatter, ClipboardManager, MemoryManager, ErrorHandler
+  enables ref feature CoreEncryption
+
+  // User Interface Block
+  def block UserInterface
+    name "User Interface Block"
+    description "Web-based user interface for text input and display"
+    owner "Frontend Team"
+    level module
+    safetylevel ASIL-A
+    tags "ui", "interface", "web"
+
+  // Input Validator Block
+  def block InputValidator
+    name "Input Validator Block"
+    description "Text input validation and sanitization component"
+    owner "Security Team"
+    level module
+    safetylevel ASIL-B
+    tags "validation", "security", "input-processing"
+
+  // Cryptographic Engine Block
+  def block CryptographicEngine
+    name "Cryptographic Engine Block"
+    description "Web Crypto API based encryption engine"
+    owner "Security Team"
+    level module
+    safetylevel ASIL-B
+    tags "crypto-engine", "web-crypto-api", "aes"
+
+  // Key Manager Block
+  def block KeyManager
+    name "Key Manager Block"
+    description "Cryptographic key generation and management system"
+    owner "Security Team"
+    level module
+    safetylevel ASIL-B
+    tags "key-management", "security", "crypto"
+
+  // Output Formatter Block
+  def block OutputFormatter
+    name "Output Formatter Block"
+    description "Encrypted data formatting and display processor"
+    owner "Frontend Team"
+    level module
+    safetylevel ASIL-A
+    tags "formatting", "output", "display"
+
+  // Clipboard Manager Block
+  def block ClipboardManager
+    name "Clipboard Manager Block"
+    description "System clipboard interface for copy operations"
+    owner "System Interface Team"
+    level module
+    safetylevel ASIL-A
+    tags "clipboard", "system", "copy"
+
+  // Memory Manager Block
+  def block MemoryManager
+    name "Memory Manager Block"
+    description "Secure memory handling and cleanup system"
+    owner "Security Team"
+    level module
+    safetylevel ASIL-B
+    tags "memory", "security", "cleanup"
+
+  // Error Handler Block
+  def block ErrorHandler
+    name "Error Handler Block"
+    description "Error processing and user feedback system"
+    owner "Security Team"
+    level module
+    safetylevel ASIL-B
+    tags "error-handling", "feedback", "security"

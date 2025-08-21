@@ -1,0 +1,1404 @@
+# Sylang Project Rules and AI Development Guidelines
+# This file provides comprehensive context for AI development of Sylang projects
+
+project_name: "Sylang Model-Based Systems Engineering Project"
+language: "Sylang"
+version: "2.18.43"
+domain: "Model-Based Systems Engineering, Digital Twin, Feature Modeling, ISO 26262 Functional Safety"
+
+# CRITICAL: All 16 extensions are fully implemented and working
+implemented_extensions:
+  - .ple (Product Line Engineering) - COMPLETE
+  - .fml (Feature Model) - COMPLETE  
+  - .vml (Variant Model) - COMPLETE
+  - .vcf (Variant Configuration) - COMPLETE
+  - .blk (Block Definition) - COMPLETE - REDESIGNED v2.18.38
+  - .fun (Function Definition) - COMPLETE
+  - .req (Requirement Definition) - COMPLETE
+  - .tst (Test Definition) - COMPLETE
+  - .spr (Sprint Definition) - COMPLETE
+  - .agt (Agent Definition) - COMPLETE
+  - .ucd (Use Case Diagram) - COMPLETE
+  - .seq (Sequence Diagram) - COMPLETE - REDESIGNED v2.18.38  
+  - .flr (Failure Analysis for FMEA) - COMPLETE
+  - .itm (Item Definition - ISO 26262) - COMPLETE
+  - .haz (Hazard Analysis - ISO 26262) - COMPLETE
+  - .sam (Safety Mechanisms - ISO 26262) - COMPLETE
+  - .fta (Fault Tree Analysis) - COMPLETE v2.18.38
+
+planned_extensions:
+  - .phy (Physical Models) - PLANNED
+  - .sim (Simulation Models) - PLANNED
+  - .cal (Calibration) - PLANNED
+
+# REAL SYLANG FILE STRUCTURE EXAMPLES
+
+## .ple FILES (Product Line Engineering)
+# Rule: ONE hdef productline, NO def statements, NO use statements
+ple_example: |
+  hdef productline AutonomousVehicleProductLine
+    name "Autonomous Vehicle Platform Product Line"
+    description "Comprehensive autonomous vehicle system covering ADAS, infotainment, powertrain, and safety systems"
+    owner "Vehicle Systems Engineering Team"
+    domain "autonomous-vehicles", "automotive-safety", "ADAS", "connected-mobility"
+    compliance "ISO 26262", "ISO 21448", "UN ECE R79", "SAE J3016"
+    firstrelease "2026-03-01"
+    tags "autonomous-driving", "L3-automation", "safety-critical", "connected-vehicle"
+    safetylevel ASIL-D
+    region "Global", "North America", "Europe", "Asia-Pacific"
+
+## .fml FILES (Feature Model)  
+# Rule: ONE hdef featureset, MULTIPLE def feature (hierarchical), uses productline
+# CRITICAL SIBLING RULES: Features at same indentation level must have consistent flags:
+# - If one sibling is mandatory/optional, ALL siblings must be mandatory/optional
+# - If one sibling is 'or', ALL siblings must be 'or' 
+# - If one sibling is 'alternative', ALL siblings must be 'alternative'
+fml_example: |
+use productline AutonomousVehicleProductLine
+
+hdef featureset AutonomousVehicleFeatures
+  name "Autonomous Vehicle Feature Set"
+  description "Comprehensive feature model for autonomous vehicle platform with L3 automation capabilities"
+  owner "Product Engineering Team"
+  tags "features", "autonomous-vehicle", "L3-automation", "ASIL-D"
+  listedfor ref productline AutonomousVehicleProductLine
+
+  def feature CoreAutonomousFeatures mandatory
+    name "Core Autonomous Driving Features"
+    description "Essential autonomous driving functionality for L3 automation"
+    owner "Autonomous Systems Team"
+    tags "core-function", "safety-critical", "L3-automation"
+    safetylevel ASIL-D
+
+    def feature PerceptionSystem mandatory
+      name "Environmental Perception System"
+      description "Multi-sensor fusion for environmental awareness"
+      owner "Perception Team"
+      tags "perception", "sensor-fusion", "environmental-awareness"
+      safetylevel ASIL-D
+
+      def feature CameraSystem mandatory
+        name "Camera-based Vision System"
+        description "Stereo and mono camera processing for object detection"
+        owner "Vision Team"
+        tags "camera", "computer-vision", "object-detection"
+        safetylevel ASIL-D
+
+      def feature LidarSystem optional
+        name "LiDAR Scanning System"  
+        description "3D point cloud processing for precise distance measurement"
+        owner "LiDAR Team"
+        tags "lidar", "3d-scanning", "distance-measurement"
+        safetylevel ASIL-C
+
+      def feature RadarSystem mandatory
+        name "Radar Detection System"
+        description "Long and short range radar for velocity and distance detection"
+        owner "Radar Team" 
+        tags "radar", "velocity-detection", "all-weather"
+        safetylevel ASIL-D
+
+    def feature PlanningSystem mandatory
+      name "Path Planning and Decision System"
+      description "Route planning and tactical decision making"
+      owner "Planning Team"
+      tags "path-planning", "decision-making", "route-optimization"
+      safetylevel ASIL-D
+
+      def feature GlobalPlanning mandatory
+        name "Global Path Planning"
+        description "High-level route planning and navigation"
+        owner "Navigation Team"
+        tags "global-planning", "navigation", "route-planning"
+        safetylevel ASIL-C
+
+      def feature LocalPlanning mandatory
+        name "Local Path Planning"
+        description "Real-time local path planning and obstacle avoidance"
+        owner "Local Planning Team"
+        tags "local-planning", "obstacle-avoidance", "real-time"
+        safetylevel ASIL-D
+
+    def feature ControlSystem mandatory
+      name "Vehicle Control System"
+      description "Actuator control for steering, acceleration, and braking"
+      owner "Control Systems Team"
+      tags "vehicle-control", "actuator-control", "safety-critical"
+      safetylevel ASIL-D
+
+      def feature SteeringControl mandatory
+        name "Autonomous Steering Control"
+        description "Electric power steering control for autonomous operation"
+        owner "Steering Team"
+        tags "steering-control", "EPS", "autonomous-steering"
+        safetylevel ASIL-D
+
+      def feature BrakeControl mandatory
+        name "Autonomous Brake Control"
+        description "Electronic brake system control for autonomous stopping"
+        owner "Brake Team"
+        tags "brake-control", "AEB", "autonomous-braking"
+        safetylevel ASIL-D
+
+      def feature ThrottleControl mandatory
+        name "Autonomous Throttle Control"
+        description "Electronic throttle control for autonomous acceleration"
+        owner "Powertrain Team"
+        tags "throttle-control", "acceleration", "speed-control"
+        safetylevel ASIL-C
+
+  def feature SafetyMonitoring mandatory
+    name "Safety Monitoring and Fallback Systems"
+    description "Comprehensive safety monitoring with fail-safe mechanisms"
+    owner "Safety Engineering Team"
+    tags "safety", "monitoring", "fail-safe", "redundancy"
+    safetylevel ASIL-D
+
+    def feature SystemHealthMonitoring mandatory
+      name "System Health Monitoring"
+      description "Real-time monitoring of all autonomous system components"
+      owner "Health Monitoring Team"
+      tags "health-monitoring", "diagnostics", "system-status"
+      safetylevel ASIL-D
+
+    def feature FallbackSystem mandatory
+      name "Minimal Risk Condition Fallback"
+      description "Safe fallback to minimal risk condition on system failure"
+      owner "Fallback Systems Team"
+      tags "fallback", "minimal-risk", "emergency-stop"
+      safetylevel ASIL-D
+
+    def feature RedundantSensors optional
+      name "Redundant Sensor Systems"
+      description "Backup sensors for critical perception functions"
+      owner "Redundancy Team"
+      tags "redundancy", "backup-sensors", "fault-tolerance"
+      safetylevel ASIL-D
+
+  def feature HumanMachineInterface optional
+    name "Human Machine Interface Systems"
+    description "Driver interaction and takeover request systems"
+    owner "HMI Team"
+    tags "HMI", "driver-interaction", "takeover-request"
+    safetylevel ASIL-B
+
+    def feature TakeoverRequest or
+      name "Takeover Request System"
+      description "Alert driver to resume manual control"
+      owner "HMI Safety Team"
+      tags "takeover", "driver-alert", "manual-fallback"
+      safetylevel ASIL-B
+
+    def feature StatusDisplay or
+      name "Autonomous System Status Display"
+      description "Visual indication of autonomous system status"
+      owner "Display Team"
+      tags "status-display", "visual-feedback", "system-status"
+      safetylevel ASIL-A
+
+    def feature VoiceInterface or
+      name "Voice Command Interface"
+      description "Voice commands for autonomous system interaction"
+      owner "Voice Interface Team"
+      tags "voice-interface", "speech-recognition", "hands-free"
+      safetylevel QM
+
+## .vml FILES (Variant Model)
+# Rule: ONE hdef variantset, NO def statements, ONLY extends ref feature statements
+vml_example: |
+use featureset AutonomousVehicleFeatures
+
+hdef variantset AutonomousVehicleVariants
+  name "Autonomous Vehicle Configuration Variants"
+  description "Configuration variants for autonomous vehicle product family targeting different market segments and regulatory requirements"
+  owner "Product Line Engineering"
+  tags "variants", "configuration", "market-segments", "L3-automation"
+
+  extends ref feature CoreAutonomousFeatures mandatory selected
+    extends ref feature PerceptionSystem mandatory selected
+      extends ref feature CameraSystem mandatory selected
+      extends ref feature LidarSystem optional selected
+      extends ref feature RadarSystem mandatory selected
+    extends ref feature PlanningSystem mandatory selected  
+      extends ref feature GlobalPlanning mandatory selected
+      extends ref feature LocalPlanning mandatory selected
+    extends ref feature ControlSystem mandatory selected
+      extends ref feature SteeringControl mandatory selected
+      extends ref feature BrakeControl mandatory selected
+      extends ref feature ThrottleControl mandatory selected
+  extends ref feature SafetyMonitoring mandatory selected
+    extends ref feature SystemHealthMonitoring mandatory selected
+    extends ref feature FallbackSystem mandatory selected
+    extends ref feature RedundantSensors optional selected
+  extends ref feature HumanMachineInterface optional selected
+    extends ref feature TakeoverRequest or selected
+    extends ref feature StatusDisplay or
+    extends ref feature VoiceInterface or
+
+## .vcf FILES (Variant Configuration)
+# Rule: ONE hdef configset, MULTIPLE def config statements
+vcf_example: |
+use variantset AutonomousVehicleVariants
+
+hdef configset AutonomousVehicleConfig
+  name "Autonomous Vehicle Premium Configuration"
+  description "Auto-generated configuration for premium autonomous vehicle variant with full sensor suite"
+  owner "Product Engineering"
+  generatedfrom ref variantset AutonomousVehicleVariants
+  generatedat "2025-08-18T17:30:45.123Z"
+  tags "variant", "config", "auto-generated", "premium"
+
+  def config c_CoreAutonomousFeatures 1
+  def config c_CoreAutonomousFeatures_PerceptionSystem 1
+  def config c_CoreAutonomousFeatures_PerceptionSystem_CameraSystem 1
+  def config c_CoreAutonomousFeatures_PerceptionSystem_LidarSystem 1
+  def config c_CoreAutonomousFeatures_PerceptionSystem_RadarSystem 1
+  def config c_CoreAutonomousFeatures_PlanningSystem 1
+  def config c_CoreAutonomousFeatures_PlanningSystem_GlobalPlanning 1
+  def config c_CoreAutonomousFeatures_PlanningSystem_LocalPlanning 1
+  def config c_CoreAutonomousFeatures_ControlSystem 1
+  def config c_CoreAutonomousFeatures_ControlSystem_SteeringControl 1
+  def config c_CoreAutonomousFeatures_ControlSystem_BrakeControl 1
+  def config c_CoreAutonomousFeatures_ControlSystem_ThrottleControl 1
+  def config c_SafetyMonitoring 1
+  def config c_SafetyMonitoring_SystemHealthMonitoring 1
+  def config c_SafetyMonitoring_FallbackSystem 1
+  def config c_SafetyMonitoring_RedundantSensors 1
+  def config c_HumanMachineInterface 1
+  def config c_HumanMachineInterface_TakeoverRequest 1
+  def config c_HumanMachineInterface_StatusDisplay 0
+  def config c_HumanMachineInterface_VoiceInterface 0
+
+## .fun FILES (Function Definition)  
+# Rule: ONE hdef functionset, MULTIPLE def function, can use configs
+fun_example: |
+use featureset AutonomousVehicleFeatures
+use configset AutonomousVehicleConfig
+
+hdef functionset AutonomousPerceptionFunctions
+  name "Autonomous Vehicle Perception Functions"
+  description "Core perception functions for environmental awareness and object detection in autonomous vehicles"
+  owner "Perception Systems Team"
+  tags "functions", "perception", "sensor-fusion", "object-detection"
+  safetylevel ASIL-D
+
+  def function CameraImageProcessing
+    name "Camera Image Processing Function"
+    description "Real-time processing of stereo and mono camera feeds for object detection and lane recognition"
+    owner "Computer Vision Team"
+    tags "camera-processing", "object-detection", "lane-recognition", "real-time"
+    enables ref feature CameraSystem
+    safetylevel ASIL-D
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_CameraSystem
+
+  def function LidarPointCloudProcessing
+    name "LiDAR Point Cloud Processing Function"
+    description "3D point cloud processing for precise distance measurement and 3D object mapping"
+    owner "LiDAR Processing Team"
+    tags "lidar-processing", "3d-mapping", "distance-measurement", "point-cloud"
+    enables ref feature LidarSystem
+    safetylevel ASIL-C
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_LidarSystem
+
+  def function RadarSignalProcessing
+    name "Radar Signal Processing Function"
+    description "Multi-range radar signal processing for velocity detection and all-weather operation"
+    owner "Radar Processing Team"
+    tags "radar-processing", "velocity-detection", "all-weather", "doppler"
+    enables ref feature RadarSystem
+    safetylevel ASIL-D
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_RadarSystem
+
+  def function SensorFusion
+    name "Multi-Sensor Fusion Function"
+    description "Fusion of camera, LiDAR, and radar data for comprehensive environmental model"
+    owner "Sensor Fusion Team"
+    tags "sensor-fusion", "data-fusion", "environmental-model", "kalman-filter"
+    enables ref feature PerceptionSystem
+    safetylevel ASIL-D
+
+  def function ObjectClassification
+    name "Object Classification Function"
+    description "Machine learning-based classification of detected objects (vehicles, pedestrians, signs)"
+    owner "AI/ML Team"
+    tags "object-classification", "machine-learning", "AI", "neural-networks"
+    enables ref feature PerceptionSystem
+    safetylevel ASIL-D
+
+  def function TrackingAndPrediction
+    name "Object Tracking and Prediction Function"
+    description "Multi-object tracking with motion prediction for dynamic environment understanding"
+    owner "Tracking Team"
+    tags "object-tracking", "motion-prediction", "kalman-tracking", "trajectory"
+    enables ref feature PerceptionSystem
+    safetylevel ASIL-D
+
+## .blk FILES (Block Definition) - REDESIGNED v2.18.38
+# Rule: ONE hdef block, MULTIPLE def message/signal, can use configs  
+blk_example: |
+use configset AutonomousVehicleConfig
+use featureset AutonomousVehicleFeatures
+
+hdef block PerceptionControlModule
+  name "Perception Control Module"
+  description "Central perception processing unit for autonomous vehicle environmental awareness"
+  designrationale "Centralized perception processing enables efficient sensor fusion and reduces computational redundancy"
+  owner "Perception Hardware Team"
+  level module
+  safetylevel ASIL-D
+  tags "perception", "sensor-fusion", "ECU", "safety-critical"
+
+  // Block relationships - at hdef level
+  composedof ref block CameraProcessingSubmodule, LidarProcessingSubmodule, RadarProcessingSubmodule, FusionProcessingSubmodule
+  enables ref feature PerceptionSystem
+  needs ref message VehiclePowerSupply, DiagnosticHeartbeat
+  needs ref signal SystemClockSignal, CalibrationStatusSignal
+  when ref config c_CoreAutonomousFeatures_PerceptionSystem
+
+  // Message interfaces (bidirectional request/response)
+  def message CameraDataRequest
+    direction input
+    datatype CameraFrameStruct
+    description "Camera image data with metadata for processing"
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_CameraSystem
+    
+  def message LidarDataRequest
+    direction input
+    datatype PointCloudStruct
+    description "LiDAR point cloud data with intensity and reflectivity"
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_LidarSystem
+    
+  def message RadarDataRequest
+    direction input
+    datatype RadarTargetArray
+    description "Radar target list with range, velocity, and angle"
+    when ref config c_CoreAutonomousFeatures_PerceptionSystem_RadarSystem
+    
+  def message DiagnosticInterface
+    direction bidirectional
+    datatype DiagnosticProtocol
+    description "UDS diagnostic communication for system health monitoring"
+    
+  def message FusedEnvironmentModel
+    direction output
+    datatype EnvironmentModelStruct
+    description "Fused environmental model with tracked objects and free space"
+
+  // Signal interfaces (unidirectional emit only)  
+  def signal ProcessingHeartbeat
+    direction output
+    datatype uint32
+    description "Processing cycle heartbeat for health monitoring"
+    
+  def signal SystemLoadStatus
+    direction output
+    datatype float
+    description "CPU and memory utilization percentage"
+    
+  def signal SensorFailureAlert
+    direction output
+    datatype SensorStatusEnum
+    description "Alert signal for sensor system failures"
+    
+  def signal CalibrationStatus
+    direction input
+    datatype CalibrationStatusEnum
+    description "Sensor calibration status from calibration module"
+
+## .req FILES (Requirement Definition)
+# Rule: ONE hdef requirementset, MULTIPLE def requirement (hierarchical)
+req_example: |
+use functionset AutonomousPerceptionFunctions
+use configset AutonomousVehicleConfig
+
+hdef requirementset AutonomousPerceptionRequirements
+  name "Autonomous Vehicle Perception System Requirements"
+  description "Comprehensive safety and functional requirements for perception system with ASIL-D compliance and ISO 26262 conformance"
+  owner "Perception Safety Engineering Team"
+  tags "safety-requirements", "ASIL-D", "ISO-26262", "perception-system"
+  safetylevel ASIL-D
+
+  def requirement REQ_PERC_001
+    name "Environmental Detection Performance"
+    description "WHEN the perception system is active THE system SHALL detect stationary objects ≥20cm at distances up to 200m with ≥99.9% accuracy"
+    rationale "Ensures reliable object detection for collision avoidance in autonomous driving"
+    verificationcriteria "Statistical testing with calibrated test objects at various distances and lighting conditions"
+    status approved
+    reqtype functional
+    owner "Object Detection Team"
+    safetylevel ASIL-D
+    implements ref function ObjectClassification
+
+    def requirement REQ_PERC_001_1
+      name "Object Classification Accuracy"
+      description "THE system SHALL classify detected objects (vehicle, pedestrian, cyclist, static) with ≥95% accuracy within 100ms"
+      rationale "Accurate classification enables appropriate collision avoidance responses"
+      verificationcriteria "ML model validation with annotated test datasets covering all object classes"
+      status approved
+      reqtype functional
+      owner "AI/ML Validation Team"
+      safetylevel ASIL-D
+      refinedfrom ref requirement REQ_PERC_001
+      implements ref function ObjectClassification
+
+    def requirement REQ_PERC_001_2
+      name "Detection Range Weather Independence"
+      description "THE system SHALL maintain ≥95% detection performance in rain (≤10mm/h) and fog (visibility ≥50m)"
+      rationale "All-weather operation critical for autonomous vehicle safety"
+      verificationcriteria "Environmental chamber testing with controlled weather simulation"
+      status approved
+      reqtype functional
+      owner "Environmental Testing Team"
+      safetylevel ASIL-D
+      refinedfrom ref requirement REQ_PERC_001
+      implements ref function RadarSignalProcessing
+
+  def requirement REQ_PERC_002
+    name "Sensor Fusion Latency"
+    description "WHEN multi-sensor data is available THE fusion algorithm SHALL output environmental model within 50ms of latest sensor data"
+    rationale "Low latency critical for real-time autonomous vehicle control"
+    verificationcriteria "Real-time system testing with synchronized sensor inputs and timing measurement"
+    status approved
+    reqtype performance
+    owner "Real-time Systems Team"
+    safetylevel ASIL-D
+    implements ref function SensorFusion
+
+  def requirement REQ_PERC_003
+    name "Sensor Redundancy and Fallback"
+    description "WHEN any single sensor fails THE system SHALL continue operation with degraded but safe performance using remaining sensors"
+    rationale "Single point of failure elimination for safety-critical perception"
+    verificationcriteria "Fault injection testing with systematic sensor failure simulation"
+    status approved
+    reqtype safety
+    owner "Fault Tolerance Team"
+    safetylevel ASIL-D
+    implements ref function SensorFusion
+    when ref config c_SafetyMonitoring_RedundantSensors
+
+## .tst FILES (Test Definition)
+# Rule: ONE hdef testset, MULTIPLE def test/procedure
+tst_example: |
+use requirementset AutonomousPerceptionRequirements
+use functionset AutonomousPerceptionFunctions
+
+hdef testset PerceptionSystemValidationTests
+  name "Autonomous Perception System Validation Test Suite"
+  description "Comprehensive validation tests for perception system covering functional, safety, and performance requirements with HIL and VIL testing"
+  owner "Perception Test Engineering Team"
+  tags "validation", "perception-test", "safety-testing", "autonomous-vehicle"
+
+  def testcase TEST_PERC_001_OBJECT_DETECTION
+    name "Environmental Object Detection Performance Test"
+    description "Validate object detection accuracy and range performance across various environmental conditions"
+    satisfies ref requirement REQ_PERC_001
+    method HIL
+    setup "Autonomous vehicle perception system in HIL test bench with radar/camera/LiDAR simulators, calibrated test objects, and environmental chamber"
+    steps "Initialize perception system and verify all sensors active
+           Place calibrated test objects at distances 20m, 50m, 100m, 150m, 200m
+           Execute detection algorithm across all sensor modalities
+           Verify object detection at each distance with position accuracy ±10cm
+           Record detection rates and classification confidence scores
+           Repeat tests in simulated rain (5mm/h, 10mm/h) and fog conditions"
+    expected "Objects detected with ≥99.9% accuracy at all test distances, classification confidence ≥95%"
+    passcriteria "Detection accuracy meets specification in ≥98% of test cases across all environmental conditions"
+    safetylevel ASIL-D
+    testresult notrun
+    owner "Object Detection Test Team"
+
+  def testcase TEST_PERC_001_1_CLASSIFICATION_ACCURACY
+    name "Object Classification Accuracy Validation"
+    description "Validate machine learning model classification performance with comprehensive object dataset"
+    satisfies ref requirement REQ_PERC_001_1
+    method VIL
+    setup "Perception ML model in virtual environment with annotated object dataset (10,000+ objects across all classes)"
+    steps "Load pre-trained classification model
+           Execute classification on test dataset covering vehicles, pedestrians, cyclists, static objects
+           Measure classification accuracy per object class
+           Verify processing time ≤100ms per classification
+           Generate confusion matrix and performance metrics"
+    expected "Classification accuracy ≥95% per object class, processing time ≤100ms"
+    passcriteria "Accuracy specification met for all object classes with consistent processing performance"
+    safetylevel ASIL-D
+    testresult notrun
+    owner "AI/ML Validation Team"
+
+  def testcase TEST_PERC_002_FUSION_LATENCY
+    name "Sensor Fusion Latency Performance Test"
+    description "Validate sensor fusion algorithm latency and real-time performance"
+    satisfies ref requirement REQ_PERC_002
+    method HIL
+    setup "Real-time HIL system with synchronized camera/LiDAR/radar inputs and precision timing measurement"
+    steps "Configure synchronized sensor data streams at 20Hz
+           Inject simultaneous sensor data packets with timestamps
+           Execute sensor fusion algorithm
+           Measure fusion processing latency from input to output
+           Validate environmental model completeness and accuracy
+           Repeat test across various traffic scenarios"
+    expected "Fusion output available within 50ms of latest sensor input"
+    passcriteria "Latency requirement met in ≥99% of fusion cycles across all test scenarios"
+    safetylevel ASIL-D
+    testresult notrun
+    owner "Real-time Performance Team"
+
+  def testcase TEST_PERC_003_SENSOR_REDUNDANCY
+    name "Sensor Failure Redundancy Test"
+    description "Validate system operation and safety during single sensor failures"
+    satisfies ref requirement REQ_PERC_003
+    method HIL
+    setup "Complete perception system with fault injection capabilities for systematic sensor failure simulation"
+    steps "Initialize all sensors and verify normal operation
+           Inject camera failure and verify radar/LiDAR compensation
+           Inject LiDAR failure and verify camera/radar compensation  
+           Inject radar failure and verify camera/LiDAR compensation
+           Measure detection performance degradation in each failure mode
+           Verify system continues safe operation with remaining sensors"
+    expected "System maintains operation with ≥85% detection performance during single sensor failure"
+    passcriteria "Safe operation maintained with acceptable performance degradation in all single failure modes"
+    safetylevel ASIL-D
+    testresult notrun
+    owner "Fault Tolerance Test Team"
+
+## .seq FILES (Sequence Diagram) - REDESIGNED v2.18.38
+# Rule: ONE hdef sequenceset, MULTIPLE def sequence with from/to/flow
+seq_example: |
+use block PerceptionControlModule
+use block PlanningControlModule
+use block VehicleControlModule
+use message EnvironmentModelUpdate
+use message PathPlanningRequest
+use signal EmergencyStopSignal
+
+hdef sequenceset AutonomousEmergencyBraking
+  name "Autonomous Emergency Braking Sequence"
+  description "Message flow sequence for autonomous emergency braking scenario detection and response"
+  owner "Safety Systems Integration Team"
+  safetylevel ASIL-D
+  tags "emergency-braking", "sequence", "safety-critical", "AEB"
+  when ref config c_SafetyMonitoring_FallbackSystem
+  
+  // Main emergency braking sequence
+  def sequence SEQ_001
+    from ref block PerceptionControlModule
+    to ref block PlanningControlModule
+    flow ref message EnvironmentModelUpdate
+    
+  def sequence SEQ_002
+    from ref block PlanningControlModule
+    to ref block VehicleControlModule
+    flow ref message PathPlanningRequest
+    when ref config c_SafetyMonitoring_FallbackSystem
+    
+  def sequence SEQ_003
+    from ref block VehicleControlModule
+    to ref block BrakeControlModule
+    flow ref signal EmergencyStopSignal
+    
+  def sequence SEQ_004
+    from ref block BrakeControlModule
+    to ref block PerceptionControlModule
+    flow ref signal BrakeEngagementConfirmation
+    
+  // Error handling fragment
+  def fragment CommunicationFailure
+    fragmenttype alt
+    condition "Communication timeout > 100ms"
+    
+    def sequence SEQ_005
+      from ref block VehicleControlModule
+      to ref block FallbackControlModule
+      flow ref signal SystemFailureAlert
+      
+  // Parallel status reporting fragment  
+  def fragment StatusReporting
+    fragmenttype parallel
+    condition "All modules must report status concurrently"
+    
+    def sequence SEQ_006
+      from ref block PerceptionControlModule
+      to ref block SystemHealthMonitor
+      flow ref signal PerceptionSystemStatus
+      
+    def sequence SEQ_007
+      from ref block PlanningControlModule
+      to ref block SystemHealthMonitor
+      flow ref signal PlanningSystemStatus
+      
+  
+
+## .ucd FILES (Use Case Diagram)
+# Rule: ONE hdef usecaseset, MULTIPLE def actor/usecase with associated/includes
+ucd_example: |
+use featureset AutonomousVehicleFeatures
+
+hdef usecaseset AutonomousVehicleUseCases
+  name "Autonomous Vehicle Use Case Diagram"
+  description "Complete use case model for autonomous vehicle system interactions with drivers and external systems"
+  owner "Systems Engineering Team"
+  tags "use-cases", "autonomous-vehicle", "actor-interactions"
+
+  def actor Driver
+    name "Vehicle Driver"
+    description "Human driver who can take control and monitor autonomous system"
+    actortype primary
+    
+  def actor TrafficManagementSystem
+    name "Traffic Management Center"
+    description "External traffic control and coordination system"
+    actortype secondary
+    
+  def actor EmergencyServices
+    name "Emergency Response Services"
+    description "Police, fire, and medical emergency services"
+    actortype secondary
+
+  def usecase ActivateAutonomousMode
+    name "Activate Autonomous Driving Mode"
+    description "Driver initiates autonomous driving with system verification"
+    associated ref actor Driver
+    includes ref function SystemReadinessCheck
+    includes ref function EngageAutonomousControl
+    
+  def usecase MonitorSystemStatus
+    name "Monitor Autonomous System Status"
+    description "Continuous monitoring of autonomous system health and performance"
+    associated ref actor Driver
+    includes ref function DisplaySystemStatus
+    includes ref function AlertDriverOfIssues
+    
+  def usecase HandleTakeoverRequest
+    name "Handle Driver Takeover Request"
+    description "Process driver takeover and transition to manual control"
+    associated ref actor Driver
+    includes ref function DisengageAutonomousControl
+    includes ref function TransferVehicleControl
+    
+  def usecase CoordinateWithTraffic
+    name "Coordinate with Traffic Management"
+    description "Communicate with traffic systems for route optimization"
+    associated ref actor TrafficManagementSystem
+    includes ref function ReceiveTrafficUpdates
+    includes ref function TransmitVehicleStatus
+    
+  def usecase EmergencyResponseProtocol
+    name "Emergency Response Coordination"
+    description "Coordinate with emergency services during incidents"
+    associated ref actor EmergencyServices
+    includes ref function DetectEmergencyVehicles
+    includes ref function ProvideLaneForEmergency
+
+## .flr FILES (Failure Analysis for FMEA)
+# Rule: ONE hdef failureset, MULTIPLE def failuremode/cause/effect
+flr_example: |
+use block PerceptionControlModule
+use functionset AutonomousPerceptionFunctions
+
+hdef failureset PerceptionSystemFailures
+  name "Perception System Failure Analysis"
+  description "Comprehensive FMEA for autonomous vehicle perception system covering sensor failures and processing errors"
+  owner "Perception Safety Team"
+  tags "FMEA", "failure-analysis", "perception-system", "safety"
+  fmeanumber "FMEA-PERC-001"
+  safetylevel ASIL-D
+
+  def failuremode CameraSystemFailure
+    name "Camera System Complete Failure"
+    description "Complete loss of camera system functionality due to hardware or software failure"
+    owner "Camera Safety Team"
+    failurerate "1.2E-6 failures/hour"
+    detectability "High"
+    severity "Critical"
+    allocatedto ref block PerceptionControlModule
+    affects ref function CameraImageProcessing
+
+    def cause CameraHardwareFailure
+      name "Camera Hardware Component Failure"
+      description "Physical failure of camera sensor, lens, or processing hardware"
+      causecategory "Hardware"
+      probability "Medium"
+      description "Sensor degradation, lens damage, or processing unit failure"
+      
+    def cause CameraSoftwareFailure
+      name "Camera Processing Software Failure"
+      description "Software crash or corruption in camera image processing algorithms"
+      causecategory "Software"
+      probability "Low"
+      description "Algorithm crash, memory corruption, or processing pipeline failure"
+
+    def effect ReducedObjectDetection
+      name "Reduced Object Detection Capability"
+      description "Loss of visual object detection reduces overall perception performance"
+      effectcategory "Performance"
+      severity "High"
+      rpn "150"
+      
+    def effect FallbackToRadarLidar
+      name "Fallback to Radar/LiDAR Only"
+      description "System operates with reduced capability using remaining sensors"
+      effectcategory "Degraded"
+      severity "Medium"
+      rpn "80"
+
+  def failuremode SensorFusionFailure
+    name "Sensor Fusion Algorithm Failure"
+    description "Failure in multi-sensor data fusion resulting in incorrect environmental model"
+    owner "Fusion Algorithm Team"
+    failurerate "3.5E-7 failures/hour"
+    detectability "Medium"
+    severity "Critical"
+    allocatedto ref block PerceptionControlModule
+    affects ref function SensorFusion
+
+    def cause AlgorithmicError
+      name "Fusion Algorithm Logic Error"
+      description "Bug or error in sensor fusion mathematical algorithms"
+      causecategory "Software"
+      probability "Low"
+      
+    def cause TimingSynchronizationError
+      name "Sensor Timing Synchronization Failure"
+      description "Loss of timing synchronization between multiple sensor inputs"
+      causecategory "System"
+      probability "Medium"
+
+    def effect IncorrectEnvironmentModel
+      name "Incorrect Environmental Model Output"
+      description "Fused sensor data produces inaccurate representation of vehicle environment"
+      effectcategory "Safety"
+      severity "Critical"
+      rpn "200"
+
+## .itm FILES (Item Definition - ISO 26262)
+# Rule: ONE hdef itemdefinition, MULTIPLE def boundary/operatingmode
+itm_example: |
+use featureset AutonomousVehicleFeatures
+
+hdef itemdefinition AutonomousVehicleItem
+  name "Autonomous Vehicle L3 System Item"
+  description "Complete item definition for Level 3 autonomous vehicle system per ISO 26262"
+  owner "Functional Safety Manager"
+  tags "ISO-26262", "item-definition", "L3-autonomous", "safety-critical"
+  iso26262part "Part 3 - Item Definition"
+  safetylevel ASIL-D
+
+  def boundary SystemBoundary
+    name "Autonomous Vehicle System Boundary"
+    description "Physical and functional boundaries of the autonomous vehicle item"
+    
+    includes ref block PerceptionControlModule
+    includes ref block PlanningControlModule
+    includes ref block VehicleControlModule
+    includes ref block HumanMachineInterface
+    excludes ref block InfotainmentSystem
+    excludes ref block ClimateControlSystem
+    
+    def boundary SensorBoundary
+      name "Sensor System Boundary"
+      description "Boundary definition for all perception sensors"
+      includes ref block CameraSystem
+      includes ref block LidarSystem
+      includes ref block RadarSystem
+      
+  def operatingmode HighwayAutonomous
+    name "Highway Autonomous Operation"
+    description "Autonomous operation on controlled access highways"
+    conditions "Highway driving, speeds 60-130 km/h, good weather"
+    safetylevel ASIL-D
+    
+    def operatingmode HighwayEntry
+      name "Highway Entry and Merging"
+      description "Autonomous highway entry and merging maneuvers"
+      conditions "Highway on-ramps, merging zones, acceleration lanes"
+      safetylevel ASIL-D
+      
+    def operatingmode HighwayExit
+      name "Highway Exit and Lane Change"
+      description "Autonomous highway exit and lane changing"
+      conditions "Highway off-ramps, lane changes, deceleration zones"
+      safetylevel ASIL-D
+
+  def operatingmode UrbanAutonomous
+    name "Urban Autonomous Operation"
+    description "Limited autonomous operation in urban environments"
+    conditions "City streets, speeds 30-60 km/h, traffic lights, pedestrians"
+    safetylevel ASIL-C
+    
+  def operatingmode ManualFallback
+    name "Manual Control Fallback"
+    description "Driver takeover and manual control operation"
+    conditions "System failure, adverse weather, construction zones"
+    safetylevel QM
+
+  itemscope ref function AutonomousPerceptionFunctions
+  itemscope ref feature CoreAutonomousFeatures
+
+## .haz FILES (Hazard Analysis - ISO 26262)
+# Rule: ONE hdef hazardanalysis, MULTIPLE def hazard/situation with ASIL assessment
+haz_example: |
+use itemdefinition AutonomousVehicleItem
+
+hdef hazardanalysis AutonomousVehicleHazards
+  name "Autonomous Vehicle Hazard Analysis"
+  description "Complete hazard analysis and risk assessment for Level 3 autonomous vehicle system per ISO 26262 Part 3"
+  owner "Functional Safety Team"
+  tags "ISO-26262", "hazard-analysis", "ASIL-assessment", "risk-analysis"
+  iso26262part "Part 3 - Hazard Analysis"
+  assessmentdate "2025-08-18"
+  safetylevel ASIL-D
+
+  def hazard UnintendedAcceleration
+    name "Unintended Vehicle Acceleration"
+    description "Vehicle accelerates without driver command or against driver intention"
+    hazardclass "Longitudinal Motion"
+    severity S3
+    exposure E4
+    controllability C2
+    asil ASIL-D
+    
+    malfunctionof ref function ThrottleControl
+    affects ref feature ControlSystem
+    leadsto ref requirement REQ_SAFE_ACCEL_001
+
+    def situation HighwayUnintendedAcceleration
+      name "Unintended Acceleration on Highway"
+      description "Vehicle accelerates unintentionally during highway autonomous operation"
+      speed "60-130 km/h"
+      environment "Highway, dry conditions"
+      trafficdensity "Medium to high traffic"
+      maxacceptabledelay "500ms"
+      nominalresponsetime "200ms"
+      severity S3
+      exposure E4
+      controllability C2
+      asil ASIL-D
+
+    def situation UrbanUnintendedAcceleration
+      name "Unintended Acceleration in Urban Area"
+      description "Vehicle accelerates unintentionally in urban environment with pedestrians"
+      speed "30-60 km/h"
+      environment "Urban streets, intersections"
+      trafficdensity "High traffic, pedestrians present"
+      maxacceptabledelay "300ms"
+      nominalresponsetime "150ms"
+      severity S3
+      exposure E5
+      controllability C3
+      asil ASIL-D
+
+  def hazard LossOfLateralControl
+    name "Loss of Lateral Vehicle Control"
+    description "Vehicle loses ability to maintain lane position or steer appropriately"
+    hazardclass "Lateral Motion"
+    severity S3
+    exposure E4
+    controllability C2
+    asil ASIL-D
+    
+    malfunctionof ref function SteeringControl
+    affects ref feature ControlSystem
+    leadsto ref requirement REQ_SAFE_STEER_001
+
+    def situation HighwayLaneDeviation
+      name "Lane Deviation on Highway"
+      description "Vehicle deviates from lane during highway autonomous operation"
+      speed "60-130 km/h"
+      environment "Highway, multiple lanes"
+      trafficdensity "High traffic density"
+      maxacceptabledelay "400ms"
+      nominalresponsetime "100ms"
+      severity S3
+      exposure E4
+      controllability C2
+      asil ASIL-D
+
+  def hazard FailureToStopAtObstacle
+    name "Failure to Stop at Obstacle"
+    description "Vehicle fails to detect obstacle and stop, resulting in collision"
+    hazardclass "Longitudinal Motion"
+    severity S3
+    exposure E4
+    controllability C3
+    asil ASIL-D
+    
+    malfunctionof ref function ObjectClassification
+    affects ref feature PerceptionSystem
+    leadsto ref requirement REQ_SAFE_STOP_001
+
+## .sam FILES (Safety Mechanisms - ISO 26262)
+# Rule: ONE hdef safetymechanismset, MULTIPLE def safetymechanism
+sam_example: |
+use hazardanalysis AutonomousVehicleHazards
+use itemdefinition AutonomousVehicleItem
+
+hdef safetymechanismset AutonomousVehicleSafetyMechanisms
+  name "Autonomous Vehicle Safety Mechanisms"
+  description "Comprehensive safety mechanisms for autonomous vehicle system per ISO 26262 Part 4"
+  owner "Safety Mechanisms Team"
+  tags "ISO-26262", "safety-mechanisms", "fault-tolerance", "fail-safe"
+  iso26262part "Part 4 - Safety Mechanisms"
+  safetylevel ASIL-D
+
+  def safetymechanism RedundantSensorValidation
+    name "Redundant Sensor Cross-Validation"
+    description "Continuous cross-validation of perception sensors to detect sensor failures"
+    mechanismtype "Detection"
+    safetylevel ASIL-D
+    safetymechanismeffectiveness "99.5%"
+    detectiontime "50ms"
+    reactiontime "100ms"
+    
+    satisfies ref requirement REQ_SAFE_SENSOR_001
+    mitigates ref hazard FailureToStopAtObstacle
+    allocatedto ref block PerceptionControlModule
+    implementedby ref function SensorFusion
+    detects ref failuremode CameraSystemFailure
+    verifiedby ref testcase TEST_PERC_003_SENSOR_REDUNDANCY
+
+  def safetymechanism EmergencyBrakingOverride
+    name "Emergency Braking Override System"
+    description "Independent emergency braking system that can override autonomous control"
+    mechanismtype "Control"
+    safetylevel ASIL-D
+    safetymechanismeffectiveness "99.9%"
+    detectiontime "20ms"
+    reactiontime "80ms"
+    
+    satisfies ref requirement REQ_SAFE_BRAKE_001
+    mitigates ref hazard UnintendedAcceleration
+    allocatedto ref block VehicleControlModule
+    implementedby ref function EmergencyBrakeActivation
+    detects ref failuremode ThrottleSystemFailure
+    verifiedby ref testcase TEST_BRAKE_OVERRIDE_001
+
+  def safetymechanism SteeringAnglePlausibilityCheck
+    name "Steering Angle Plausibility Monitoring"
+    description "Continuous monitoring of steering commands for plausibility and range limits"
+    mechanismtype "Detection"
+    safetylevel ASIL-D
+    safetymechanismeffectiveness "98.7%"
+    detectiontime "10ms"
+    reactiontime "50ms"
+    
+    satisfies ref requirement REQ_SAFE_STEER_002
+    mitigates ref hazard LossOfLateralControl
+    allocatedto ref block VehicleControlModule
+    implementedby ref function SteeringPlausibilityCheck
+    detects ref failuremode SteeringSystemFailure
+    verifiedby ref testcase TEST_STEER_PLAUSIBILITY_001
+
+  def safetymechanism DriverTakeoverRequest
+    name "Driver Takeover Request System"
+    description "Alert system to request driver takeover when autonomous system reaches limits"
+    mechanismtype "Mitigation"
+    safetylevel ASIL-B
+    safetymechanismeffectiveness "95.0%"
+    detectiontime "100ms"
+    reactiontime "3000ms"
+    
+    satisfies ref requirement REQ_SAFE_TAKEOVER_001
+    mitigates ref hazard LossOfLateralControl
+    allocatedto ref block HumanMachineInterface
+    implementedby ref function TakeoverRequest
+    verifiedby ref testcase TEST_TAKEOVER_REQUEST_001
+
+## .fta FILES (Fault Tree Analysis) - NEW v2.18.38
+# Rule: ONE hdef faulttree, MULTIPLE def gate with hierarchical structure
+fta_example: |
+use failureset PerceptionSystemFailures
+use hazardanalysis AutonomousVehicleHazards
+use safetymechanismset AutonomousVehicleSafetyMechanisms
+
+hdef faulttree VehicleCollisionFaultTree
+  name "Vehicle Collision Fault Tree Analysis"
+  description "Complete FTA for vehicle collision scenarios in autonomous operation per ISO 26262"
+  owner "Safety Analysis Team"
+  safetylevel ASIL-D
+  tags "fault-tree", "collision-analysis", "quantitative-fta", "safety-critical"
+  
+  // Top event - what we're analyzing
+  topevent ref failuremode VehicleCollisionEvent
+  
+  // System level gate structure
+  def gate systemfailure
+    gatetype or
+    
+    // These reference top events from block-level FTA files
+    input ref failuremode PerceptionSystemCompleteFail      // From PerceptionModule.fta
+    input ref failuremode PlanningSystemCompleteFail        // From PlanningModule.fta  
+    input ref failuremode ControlSystemCompleteFail         // From ControlModule.fta
+    input ref failuremode HumanFactorError                  // From HumanFactors.fta
+    
+    output ref failuremode VehicleCollisionEvent
+
+// Block-level FTA - separate conceptual file
+hdef faulttree PerceptionModuleFaultTree
+  name "Perception Module Fault Tree"
+  description "Detailed fault tree for perception system failures"
+  owner "Perception Safety Team"
+  allocatedto ref block PerceptionControlModule
+  safetylevel ASIL-D
+  
+  // This is what the system level references
+  topevent ref failuremode PerceptionSystemCompleteFail
+  
+  def gate perceptionfailure
+    gatetype or
+    
+    input ref gate sensorfailures
+    input ref gate processingfailures
+    input ref gate communicationfailures
+    
+    output ref failuremode PerceptionSystemCompleteFail
+
+  def gate sensorfailures
+    gatetype and  // All sensors must fail (redundancy)
+    
+    input ref failuremode CameraSystemFailure       // Basic events from .flr
+    input ref failuremode LidarSystemFailure
+    input ref failuremode RadarSystemFailure
+    
+    output ref gate perceptionfailure
+
+  def gate processingfailures
+    gatetype or   // Any processing failure causes perception failure
+    
+    input ref failuremode SensorFusionFailure
+    input ref failuremode ObjectClassificationFailure
+    input ref failuremode TrackingAlgorithmFailure
+    
+    output ref gate perceptionfailure
+
+  def gate communicationfailures
+    gatetype xor  // Exclusive failure modes
+    
+    input ref failuremode CANBusFailure
+    input ref failuremode EthernetFailure
+    
+    output ref gate perceptionfailure
+
+## .spr FILES (Sprint/Project Planning)
+# Rule: ONE hdef sprint, MULTIPLE def epic/story/task (hierarchical), agent references
+spr_example: |
+use agentset AutonomousVehicleAgents
+
+hdef sprint AutonomousVehicleDevelopmentSprint
+  name "Autonomous Vehicle L3 System Development Sprint"
+  description "Complete autonomous vehicle system design, implementation, and validation sprint"
+  owner "Autonomous Systems Program Manager"
+  startdate "2025-09-01"
+  enddate "2025-12-15"
+
+  def epic PerceptionSystemDevelopment
+    name "Perception System Architecture and Implementation"
+    description "Design and implement complete perception system with sensor fusion and object detection"
+    assignedto ref agent PerceptionSystemsAgent
+    issuestatus open
+    priority critical
+
+    def story PerceptionRequirements
+      name "Perception System Requirements Definition"
+      description "Define comprehensive requirements for perception system including performance, safety, and functional specifications"
+      assignedto ref agent SafetyRequirementsAgent
+      issuestatus open
+      priority critical
+
+      def task PerceptionFunctionalRequirements
+        name "Perception Functional Requirements"
+        description "Define functional requirements for object detection, classification, and tracking performance"
+        assignedto ref agent PerceptionSystemsAgent
+        issuestatus open
+        priority critical
+        points "13"
+        outputfile "requirements/PerceptionFunctionalRequirements.req"
+
+      def task PerceptionSafetyRequirements
+        name "Perception Safety Requirements"
+        description "Define ASIL-D safety requirements for perception system including redundancy and fail-safe mechanisms"
+        assignedto ref agent SafetyRequirementsAgent
+        issuestatus backlog
+        priority critical
+        points "21"
+        outputfile "requirements/PerceptionSafetyRequirements.req"
+
+    def story SensorFusionImplementation
+      name "Multi-Sensor Fusion Algorithm Implementation"
+      description "Implement real-time sensor fusion algorithm combining camera, LiDAR, and radar data"
+      assignedto ref agent PerceptionSystemsAgent
+      issuestatus backlog
+      priority high
+
+      def task FusionAlgorithmDesign
+        name "Sensor Fusion Algorithm Design"
+        description "Design Kalman filter-based sensor fusion algorithm for multi-modal perception data"
+        assignedto ref agent PerceptionSystemsAgent
+        issuestatus backlog
+        priority high
+        points "8"
+        outputfile "functions/SensorFusionFunctions.fun"
+
+      def task FusionImplementation
+        name "Sensor Fusion Implementation"
+        description "Implement sensor fusion algorithm in C++ with real-time performance optimization"
+        assignedto ref agent PerceptionSystemsAgent
+        issuestatus backlog
+        priority high
+        points "13"
+        outputfile "blocks/PerceptionControlModule.blk"
+
+  def epic SafetyValidation
+    name "Safety Analysis and Validation"
+    description "Complete safety analysis including FMEA, FTA, and ISO 26262 compliance validation"
+    assignedto ref agent FunctionalSafetyAgent
+    issuestatus backlog
+    priority critical
+
+    def story HazardAnalysis
+      name "Hazard Analysis and Risk Assessment"
+      description "Conduct comprehensive hazard analysis with ASIL determination per ISO 26262"
+      assignedto ref agent FunctionalSafetyAgent
+      issuestatus backlog
+      priority critical
+      
+      def task HazardIdentification
+        name "System Hazard Identification"
+        description "Identify all potential hazards for autonomous vehicle system operation"
+        assignedto ref agent FunctionalSafetyAgent
+        issuestatus backlog
+        priority critical
+        points "5"
+        outputfile "safety/AutonomousVehicleHazards.haz"
+
+    def story FaultTreeAnalysis
+      name "Fault Tree Analysis"
+      description "Develop quantitative fault tree analysis for critical failure scenarios"
+      assignedto ref agent FunctionalSafetyAgent
+      issuestatus backlog
+      priority high
+      
+      def task CollisionFaultTree
+        name "Vehicle Collision Fault Tree"
+        description "Create detailed fault tree for vehicle collision scenarios with quantitative analysis"
+        assignedto ref agent FunctionalSafetyAgent
+        issuestatus backlog
+        priority high
+        points "8"
+        outputfile "safety/VehicleCollisionFaultTree.fta"
+
+## .agt FILES (Agent Definition)
+# Rule: ONE hdef agentset, MULTIPLE def agent (with roles and specializations)
+agt_example: |
+hdef agentset AutonomousVehicleAgents
+  name "Autonomous Vehicle Engineering Agents"
+  description "Specialized AI agents for autonomous vehicle systems engineering tasks"
+  owner "AI Engineering Team"
+
+  def agent PerceptionSystemsAgent
+    name "Perception Systems Engineering Agent"
+    description "Expert in autonomous vehicle perception systems, sensor fusion, and computer vision"
+    role "Perception Systems Engineer"
+    specialization "Autonomous Vehicle Perception"
+    expertise "Sensor fusion", "Computer vision", "Machine learning", "Real-time processing"
+    context "Autonomous vehicles", "Multi-sensor systems", "ASIL compliance", "Object detection"
+
+  def agent FunctionalSafetyAgent
+    name "Functional Safety Engineering Agent"
+    description "Specialist in automotive functional safety, ISO 26262, and hazard analysis"
+    role "Functional Safety Engineer"
+    specialization "Automotive Functional Safety"
+    expertise "ISO 26262", "Hazard analysis", "FMEA", "Fault tree analysis", "ASIL assessment"
+    context "Automotive safety", "Risk assessment", "Safety mechanisms", "Failure analysis"
+
+  def agent SafetyRequirementsAgent
+    name "Safety Requirements Engineering Agent"
+    description "Expert in safety-critical requirements engineering and verification"
+    role "Safety Requirements Engineer"
+    specialization "Safety Requirements Engineering"
+    expertise "Safety requirements", "Requirements traceability", "Verification", "Validation"
+    context "Safety-critical systems", "ASIL requirements", "Requirements validation"
+
+  def agent TestValidationAgent
+    name "Test and Validation Engineering Agent"
+    description "Specialist in autonomous vehicle testing, HIL/SIL validation, and test automation"
+    role "Test and Validation Engineer"
+    specialization "Autonomous Vehicle Testing"
+    expertise "HIL testing", "SIL validation", "Test automation", "Performance testing"
+    context "Autonomous vehicle validation", "Safety testing", "Real-time systems"
+
+# Multiple def Rules by File Type
+def_statement_rules:
+  .ple: "NO def statements - only hdef productline with properties"
+  .fml: "MULTIPLE def feature allowed - hierarchical features with constraints"
+  .vml: "AUTO-GENERATED - Do not create manually, use right-click command on .fml"
+  .vcf: "AUTO-GENERATED - Do not create manually, use right-click command on .vml"
+  .blk: "MULTIPLE def message/signal allowed - interface definitions with direction/datatype"
+  .fun: "MULTIPLE def function allowed - behavioral specifications"
+  .req: "MULTIPLE def requirement allowed - hierarchical requirements with traceability"
+  .tst: "MULTIPLE def test allowed - validation test cases and procedures"
+  .spr: "MULTIPLE def epic/story/task allowed - hierarchical project planning"
+  .agt: "MULTIPLE def agent allowed - specialized AI agents"
+  .ucd: "MULTIPLE def actor/usecase allowed - use case diagrams with actor interactions"
+  .seq: "MULTIPLE def sequence/fragment allowed - message flow sequences between blocks"
+  .flr: "MULTIPLE def failuremode/cause/effect allowed - FMEA analysis"
+  .itm: "MULTIPLE def boundary/operatingmode allowed - ISO 26262 item definition"
+  .haz: "MULTIPLE def hazard/situation allowed - ISO 26262 hazard analysis with ASIL"
+  .sam: "MULTIPLE def safetymechanism allowed - ISO 26262 safety mechanisms"
+  .fta: "MULTIPLE def gate allowed - fault tree analysis with hierarchical gates"
+
+# Core Language Rules - ACTUAL SYLANG SYNTAX
+core_syntax:
+  header_definition: "hdef <type> <identifier>"  # Only ONE per file
+  symbol_definition: "def <type> <identifier> [optional_flags]"  # Multiple allowed except .ple/.vml
+  property_statement: "<property> <value>"  # Properties indented under parent
+  relation_statement: "<relation> ref <target> <identifier>"  # Cross-file references
+  conditional_visibility: "when ref config <config_identifier>"  # Config-based graying
+  import_statement: "use <type> <identifier>"  # Import external symbols
+  
+indentation_rules:
+  - Use 2 spaces or tab per indentation level
+  - Parent-child relationships through indentation
+  - Properties and relations indented under their parent symbols
+
+# Valid Keywords by File Type - COMPLETE v2.18.38
+valid_keywords:
+  .ple: ["hdef", "productline", "name", "description", "owner", "domain", "compliance", "firstrelease", "tags", "safetylevel", "region"]
+  .fml: ["use", "hdef", "featureset", "listedfor", "def", "feature", "name", "description", "owner", "tags", "safetylevel", "requires", "excludes", "mandatory", "optional", "or", "alternative"]
+  .vml: ["AUTO-GENERATED - use command: Generate VML from FML"]
+  .vcf: ["AUTO-GENERATED - use command: Generate VCF from VML"]
+  .fun: ["use", "hdef", "functionset", "def", "function", "name", "description", "owner", "tags", "safetylevel", "enables", "allocatedto", "when", "ref", "config"]
+  .blk: ["use", "hdef", "block", "def", "message", "signal", "name", "description", "designrationale", "owner", "tags", "level", "safetylevel", "direction", "datatype", "composedof", "enables", "needs", "when", "ref", "config"]
+  .req: ["use", "hdef", "requirementset", "def", "requirement", "name", "description", "owner", "tags", "rationale", "verificationcriteria", "status", "reqtype", "safetylevel", "refinedfrom", "derivedfrom", "implements", "allocatedto", "when", "ref", "config"]
+  .tst: ["use", "hdef", "testset", "def", "testcase", "name", "description", "owner", "tags", "safetylevel", "setup", "passcriteria", "testresult", "expected", "method", "steps", "satisfies", "derivedfrom", "refinedfrom", "when", "ref", "config"]
+  .spr: ["use", "hdef", "sprint", "def", "epic", "story", "task", "name", "description", "owner", "startdate", "enddate", "issuestatus", "priority", "assignedto", "points", "outputfile"]
+  .agt: ["use", "hdef", "agentset", "def", "agent", "name", "description", "owner", "role", "specialization", "expertise", "context"]
+  .ucd: ["use", "hdef", "usecaseset", "def", "actor", "usecase", "name", "description", "owner", "tags", "actortype", "associated", "includes", "when", "ref"]
+  .seq: ["use", "hdef", "sequenceset", "def", "sequence", "fragment", "name", "description", "owner", "tags", "safetylevel", "from", "to", "flow", "fragmenttype", "condition", "when", "ref"]
+  .flr: ["use", "hdef", "failureset", "def", "failuremode", "cause", "effect", "name", "description", "owner", "tags", "fmeanumber", "safetylevel", "failurerate", "detectability", "severity", "allocatedto", "affects", "causecategory", "probability", "effectcategory", "rpn", "when", "ref"]
+  .itm: ["use", "hdef", "itemdefinition", "def", "boundary", "operatingmode", "name", "description", "owner", "tags", "iso26262part", "safetylevel", "conditions", "includes", "excludes", "itemscope", "when", "ref"]
+  .haz: ["use", "hdef", "hazardanalysis", "def", "hazard", "situation", "name", "description", "owner", "tags", "iso26262part", "assessmentdate", "hazardclass", "severity", "exposure", "controllability", "asil", "speed", "environment", "trafficdensity", "maxacceptabledelay", "nominalresponsetime", "malfunctionof", "affects", "leadsto", "when", "ref"]
+  .sam: ["use", "hdef", "safetymechanismset", "def", "safetymechanism", "name", "description", "owner", "tags", "iso26262part", "safetylevel", "mechanismtype", "safetymechanismeffectiveness", "detectiontime", "reactiontime", "satisfies", "mitigates", "allocatedto", "implementedby", "detects", "verifiedby", "when", "ref"]
+  .fta: ["use", "hdef", "faulttree", "def", "gate", "name", "description", "owner", "tags", "safetylevel", "topevent", "gatetype", "input", "output", "allocatedto", "when", "ref"]
+
+# File-Specific Rules - UPDATED v2.18.38
+file_rules:
+  .ple: "Root file - no use statements, no def statements, only properties under hdef productline"
+  .fml: "Feature hierarchy - uses productline, hierarchical def feature with mandatory/optional/or/alternative flags"
+  .vml: "AUTO-GENERATED from .fml - variant selection with extends ref feature statements"
+  .vcf: "AUTO-GENERATED from .vml - configuration values with def config statements (0/1 values)"
+  .fun: "Function definitions - uses imports, def function, supports when ref config for graying"
+  .blk: "Block definitions - uses imports, def message/signal for interfaces with direction/datatype, block relations (composedof/enables/needs) at hdef level, needs only for message/signal"
+  .req: "Requirements - uses imports, hierarchical def requirement with traceability relations"
+  .tst: "Test definitions - uses imports, def testcase with validation relations"
+  .spr: "Sprint definitions - uses imports, hierarchical def epic/story/task with agent references"
+  .agt: "Agent definitions - uses imports, def agent with roles and specializations"
+  .ucd: "Use case definitions - uses imports, def actor/usecase with associated/includes relationships"
+  .seq: "Sequence definitions - uses imports, def sequence with from/to ref block and flow ref message/signal"
+  .flr: "Failure analysis - uses imports, def failuremode/cause/effect for FMEA with RPN calculations"
+  .itm: "Item definition - uses imports, def boundary/operatingmode for ISO 26262 item definition"
+  .haz: "Hazard analysis - uses imports, def hazard/situation for ISO 26262 hazard analysis with ASIL assessment"
+  .sam: "Safety mechanisms - uses imports, def safetymechanism for ISO 26262 safety mechanisms with effectiveness metrics"
+  .fta: "Fault tree analysis - uses imports, def gate for hierarchical fault tree analysis with gate types"
+
+# Enum Values - UPDATED v2.18.38
+enum_values:
+  safetylevel: ["ASIL-A", "ASIL-B", "ASIL-C", "ASIL-D", "QM", "SIL-1", "SIL-2", "SIL-3", "SIL-4"]
+  level: ["productline", "system", "subsystem", "component", "module", "interface"]
+  direction: ["input", "output", "bidirectional"]
+  status: ["draft", "review", "approved", "deprecated", "implemented"]
+  reqtype: ["functional", "non-functional", "system", "software", "hardware", "interface", "safety"]
+  testresult: ["pass", "fail", "intest", "notrun", "blocked"]
+  method: ["MIL", "SIL", "PIL", "HIL", "VIL", "manual", "automated"]
+  issuestatus: ["backlog", "open", "inprogress", "blocked", "canceled", "done"]
+  priority: ["low", "medium", "high", "critical"]
+  actortype: ["primary", "secondary"]
+  fragmenttype: ["alt", "else", "parallel", "loop"]
+  severity: ["S0", "S1", "S2", "S3"]
+  exposure: ["E0", "E1", "E2", "E3", "E4", "E5"]
+  controllability: ["C0", "C1", "C2", "C3"]
+  asil: ["QM", "ASIL-A", "ASIL-B", "ASIL-C", "ASIL-D"]
+  mechanismtype: ["Detection", "Control", "Mitigation"]
+  gatetype: ["and", "or", "xor", "inhibit"]
+
+# Cross-File Relationships - COMPLETE v2.18.38
+relationship_validation:
+  valid_patterns:
+    - "listedfor ref productline <identifier>" (in .fml)
+    - "generatedfrom ref variantset <identifier>" (in .vcf)
+    - "extends ref feature <identifier> [flags]" (in .vml)
+    - "requires ref feature <identifier1>, <identifier2>" (in .fml)
+    - "excludes ref feature <identifier1>, <identifier2>" (in .fml)
+    - "implements ref function <identifier>" (in .req)
+    - "allocatedto ref block <identifier>" (in .fun/.req/.flr/.sam/.fta)
+    - "satisfies ref requirement <identifier>" (in .tst/.sam)
+    - "when ref config <identifier>" (in .fun/.blk/.req/.tst/.ucd/.seq/.flr/.itm/.haz/.sam/.fta)
+    - "inherits ref featureset <identifier>" (in .fml)
+    - "assignedto ref agent <identifier>" (in .spr)
+    - "associated ref actor <identifier>" (in .ucd)
+    - "includes ref function <identifier>" (in .ucd)
+    - "from ref block <identifier>" (in .seq)
+    - "to ref block <identifier>" (in .seq)
+    - "flow ref message <identifier>" (in .seq)
+    - "flow ref signal <identifier>" (in .seq)
+    - "needs ref message <identifier>" (in .blk - only for message/signal interfaces)
+    - "needs ref signal <identifier>" (in .blk - only for message/signal interfaces)
+    - "affects ref function <identifier>" (in .flr)
+    - "itemscope ref function <identifier>" (in .itm)
+    - "malfunctionof ref function <identifier>" (in .haz)
+    - "affects ref feature <identifier>" (in .haz)
+    - "leadsto ref requirement <identifier>" (in .haz)
+    - "mitigates ref hazard <identifier>" (in .sam)
+    - "detects ref failuremode <identifier>" (in .sam)
+    - "verifiedby ref testcase <identifier>" (in .sam)
+    - "topevent ref failuremode <identifier>" (in .fta)
+    - "input ref failuremode <identifier>" (in .fta)
+    - "input ref gate <identifier>" (in .fta)
+    - "output ref failuremode <identifier>" (in .fta)
+    - "output ref gate <identifier>" (in .fta)
+
+# Auto-Generation Commands
+auto_generation_commands:
+  .vml_from_fml: "Right-click .fml file → 'Generate VML from FML'"
+  .vcf_from_vml: "Right-click .vml file → 'Generate VCF from VML'"
+  note: "AI should NOT create .vml or .vcf files manually - instruct users to use these commands"
+
+# Config-Based Feature Management  
+config_system:
+  - Config definitions: "def config <name> <0|1>" (in .vcf files)
+  - Symbol visibility: "when ref config <config_name>" (in most file types)
+  - Graying behavior: config=0 makes symbols gray and functionally unavailable
+  - File restrictions: when ref config NOT allowed in .ple/.fml/.vml/.vcf files
+
+# AI Development Guidelines
+ai_instructions:
+  file_creation:
+    - Always start with appropriate use statements (except .ple)
+    - Follow with single hdef statement  
+    - Use only valid keywords for each file type
+    - Follow indentation hierarchy (2 spaces or tab)
+    - Use when ref config appropriately (not in .ple/.fml/.vml/.vcf)
+    - Reference valid symbols from imported files
+    - For .blk files: use def message/signal instead of def port
+    - For .seq files: use def sequence with from/to ref block and flow ref message/signal
+    - For safety files (.flr/.itm/.haz/.sam/.fta): ensure ISO 26262 compliance
+    
+  symbol_naming:
+    - Use CamelCase for identifiers
+    - Descriptive names reflecting purpose
+    - Consistent naming across related files
+    - Follow c_FeatureName pattern for configs
+    
+  validation_awareness:
+    - .fml sibling consistency rules
+    - .vml selection constraint rules  
+    - Cross-file symbol resolution
+    - Config-based graying behavior
+    - ISO 26262 compliance for safety extensions
+
+# ISO 26262 Compliance Guide
+iso26262_compliance:
+  complete_toolchain: "Extensions .itm, .haz, .sam, .fta provide full ISO 26262 Part 3 & 4 compliance"
+  workflow: "Item Definition (.itm) → Hazard Analysis (.haz) → Safety Mechanisms (.sam) → Fault Tree Analysis (.fta)"
+  asil_support: "Full ASIL-A through ASIL-D support with QM (Quality Management)"
+  traceability: "Complete traceability from hazards through requirements to safety mechanisms"
+
+last_updated: "2025-08-18T22:35:23.241Z"
+generated_by: "Sylang VSCode Extension v2.18.43"

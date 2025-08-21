@@ -1,0 +1,336 @@
+use agentset EncryptionAppAgents
+
+hdef sprint EncryptionAppInitialSprint
+  name "Encryption App Initial Sprint"
+  description "Create all Sylang documentation and implement a minimal web app that encrypts a user-provided string using HTML/JavaScript/Tailwind CSS"
+  owner "User"
+  startdate "2025-08-12"
+  enddate "2025-08-20"
+
+  def epic SylangDocumentation
+    name "Sylang Documentation Complete"
+    description "Author all core Sylang artifacts for the project and ensure cross-file consistency"
+    assignedto ref agent SystemsEngineerAgent
+    issuestatus inprogress
+    priority high
+
+    def story ProductLineAndFeatures
+      name "Product Line and Feature Modeling"
+      description "Create product line and feature model, then generate variant model and configuration"
+      assignedto ref agent SystemsEngineerAgent
+      issuestatus done
+      priority high
+
+      def task CreateProductLineDefinition
+        name "Create Product Line (.ple)"
+        description "Author the product line definition for the encryption web app"
+        assignedto ref agent SystemsEngineerAgent
+        issuestatus done
+        priority high
+        points "3"
+        outputfile "productline/EncryptionWebApp.ple"
+
+      def task CreateFeatureModel
+        name "Create Feature Model (.fml)"
+        description "Define features for encryption functionality, UI, and security constraints"
+        assignedto ref agent SystemsEngineerAgent, RequirementsEngineerAgent
+        issuestatus done
+        priority high
+        points "5"
+        outputfile "features/EncryptionWebApp.fml"
+
+      def task GenerateVariantModelFromFML
+        name "Generate Variant Model (.vml)"
+        description "Use right-click on .fml → 'Generate VML from FML' to create variant selections"
+        assignedto ref agent SystemsEngineerAgent
+        issuestatus done
+        priority medium
+        points "2"
+        outputfile "variants/EncryptionWebAppVariants.vml"
+
+      def task GenerateVariantConfigFromVML
+        name "Generate Variant Config (.vcf)"
+        description "Use right-click on .vml → 'Generate VCF from VML' to create configuration values"
+        assignedto ref agent SystemsEngineerAgent
+        issuestatus done
+        priority medium
+        points "2"
+        outputfile "configs/EncryptionWebAppConfig.vcf"
+
+    def story FunctionsRequirementsTests
+      name "Functions, Requirements, and Tests"
+      description "Define functions enabling encryption, author requirements, and create test set"
+      assignedto ref agent SystemsEngineerAgent
+      issuestatus open
+      priority high
+
+      def task CreateFunctionSet
+        name "Create Function Set (.fun)"
+        description "Specify functions for encryption processing and any helper operations"
+        assignedto ref agent SystemsEngineerAgent, FrontendEngineerAgent
+        issuestatus done
+        priority high
+        points "5"
+        outputfile "functions/EncryptionFunctions.fun"
+
+      def task CreateRequirements
+        name "Create Requirements (.req)"
+        description "Define functional and non-functional requirements including encryption behavior and usability"
+        assignedto ref agent RequirementsEngineerAgent, SecurityEngineerAgent
+        issuestatus done
+        priority high
+        points "5"
+        outputfile "requirements/EncryptionRequirements.req"
+
+      def task CreateTestSet
+        name "Create Test Set (.tst)"
+        description "Define test cases that validate requirements and reference configuration where relevant"
+        assignedto ref agent TestEngineerAgent
+        issuestatus done
+        priority high
+        points "5"
+        outputfile "tests/EncryptionAppTests.tst"
+
+    def story AgentReview
+      name "Agent Review"
+      description "Review and finalize agents coverage for delivery"
+      assignedto ref agent ProductManagerAgent
+      issuestatus open
+      priority medium
+
+      def task ReviewAndFinalizeAgents
+        name "Review and Finalize Agents (.agt)"
+        description "Ensure agent roles and responsibilities fully cover the scope"
+        assignedto ref agent ProductManagerAgent
+        issuestatus done
+        priority medium
+        points "1"
+        outputfile "agents/EncryptionAppAgents.agt"
+
+  def epic SecurityDesign
+    name "Security Design and Threat Modeling"
+    description "Select safe-in-browser crypto approach and document threat model and validation"
+    assignedto ref agent SecurityEngineerAgent
+    issuestatus open
+    priority high
+
+    def story CryptoApproach
+      name "Crypto Approach Selection"
+      description "Choose Web Crypto API usage patterns, key handling, and algorithm parameters"
+      assignedto ref agent SecurityEngineerAgent
+      issuestatus open
+      priority high
+
+      def task DecideCryptoUsingWebCryptoAPI
+        name "Decide Crypto Using Web Crypto API"
+        description "Document chosen algorithm (e.g., AES-GCM), IV strategy, encoding, and error handling"
+        assignedto ref agent SecurityEngineerAgent
+        issuestatus done
+        priority high
+        points "3"
+        outputfile "docs/Security/CryptoDecision.md"
+
+      def task DefineInputValidationRules
+        name "Define Input Validation Rules"
+        description "Specify input sanitation and length constraints to reduce misuse and crashes"
+        assignedto ref agent SecurityEngineerAgent, RequirementsEngineerAgent
+        issuestatus done
+        priority medium
+        points "2"
+        outputfile "docs/Security/InputValidation.md"
+
+    def story ThreatModeling
+      name "Threat Modeling"
+      description "Identify threats and mitigations for client-side encryption use-case"
+      assignedto ref agent SecurityEngineerAgent
+      issuestatus open
+      priority medium
+
+      def task AuthorThreatModel
+        name "Author Threat Model"
+        description "Create STRIDE-style threats and mitigations including copy/paste leakage and clipboard risks"
+        assignedto ref agent SecurityEngineerAgent
+        issuestatus done
+        priority medium
+        points "3"
+        outputfile "docs/Security/ThreatModel.md"
+
+  def epic FrontendImplementation
+    name "Frontend Implementation (HTML/JS/Tailwind)"
+    description "Build the user interface and encryption logic with Tailwind via CDN and Web Crypto API"
+    assignedto ref agent FrontendEngineerAgent
+    issuestatus open
+    priority high
+
+    def story UIConstruction
+      name "UI Construction"
+      description "Create the HTML structure and include Tailwind via CDN"
+      assignedto ref agent FrontendEngineerAgent, UIUXDesignerAgent
+      issuestatus open
+      priority high
+
+      def task ImplementHTML
+        name "Implement HTML"
+        description "Create a simple page with a text field, key/secret input (if applicable), and encrypted output area"
+        assignedto ref agent FrontendEngineerAgent
+        issuestatus done
+        priority high
+        points "5"
+        outputfile "web/index.html"
+
+      def task IntegrateTailwind
+        name "Integrate Tailwind CSS"
+        description "Use Tailwind CDN for rapid styling and responsive layout"
+        assignedto ref agent FrontendEngineerAgent
+        issuestatus done
+        priority medium
+        points "2"
+        outputfile "web/index.html"
+
+    def story LogicAndEnhancements
+      name "Encryption Logic and Enhancements"
+      description "Implement encryption logic with Web Crypto API and UX niceties"
+      assignedto ref agent FrontendEngineerAgent
+      issuestatus open
+      priority high
+
+      def task ImplementJavaScriptEncryption
+        name "Implement JavaScript Encryption"
+        description "Use Web Crypto API (AES-GCM) to encrypt user input, with base64 output"
+        assignedto ref agent FrontendEngineerAgent, SecurityEngineerAgent
+        issuestatus done
+        priority high
+        points "8"
+        outputfile "web/app.js"
+
+      def task AddCopyToClipboard
+        name "Add Copy-to-Clipboard"
+        description "Add a button to copy the encrypted string to clipboard with success/fail states"
+        assignedto ref agent FrontendEngineerAgent
+        issuestatus done
+        priority low
+        points "2"
+        outputfile "web/app.js"
+
+    def story AccessibilityAndUX
+      name "Accessibility and UX"
+      description "Ensure the UI is accessible and easy to use"
+      assignedto ref agent UIUXDesignerAgent
+      issuestatus open
+      priority medium
+
+      def task AccessibilityAuditChecklist
+        name "Accessibility Audit Checklist"
+        description "Document keyboard navigation, contrast, and ARIA as needed"
+        assignedto ref agent UIUXDesignerAgent
+        issuestatus open
+        priority medium
+        points "2"
+        outputfile "docs/UIUX/A11yChecklist.md"
+
+      def task UIWireframe
+        name "UI Wireframe"
+        description "Provide a quick wireframe and component layout description"
+        assignedto ref agent UIUXDesignerAgent
+        issuestatus open
+        priority low
+        points "1"
+        outputfile "docs/UIUX/Wireframe.md"
+
+  def epic TestingAndValidation
+    name "Testing and Validation"
+    description "Author tests in Sylang and provide supporting vectors and traceability"
+    assignedto ref agent TestEngineerAgent
+    issuestatus open
+    priority high
+
+    def story DefineTests
+      name "Define Tests"
+      description "Extend .tst with cases and vectors mapped to requirements"
+      assignedto ref agent TestEngineerAgent
+      issuestatus open
+      priority high
+
+      def task AddDeterministicTestVectors
+        name "Add Deterministic Test Vectors"
+        description "Provide known inputs, keys, and expected outputs for encryption"
+        assignedto ref agent TestEngineerAgent, SecurityEngineerAgent
+        issuestatus open
+        priority medium
+        points "3"
+        outputfile "tests/TestVectors.json"
+
+      def task MapTestsToRequirements
+        name "Map Tests to Requirements"
+        description "Ensure each test references relevant requirements and configs"
+        assignedto ref agent TestEngineerAgent, RequirementsEngineerAgent
+        issuestatus open
+        priority medium
+        points "2"
+        outputfile "docs/Tests/Traceability.md"
+
+      def task ManualTestPlan
+        name "Manual Test Plan"
+        description "Checklist for manual verification in common browsers"
+        assignedto ref agent TestEngineerAgent
+        issuestatus open
+        priority low
+        points "2"
+        outputfile "docs/Tests/ManualPlan.md"
+
+  def epic DeliveryAndCI
+    name "Delivery and CI/CD"
+    description "Set up CI and static hosting for the app"
+    assignedto ref agent DevOpsEngineerAgent
+    issuestatus open
+    priority medium
+
+    def story CIAndHosting
+      name "CI and Hosting Setup"
+      description "Automate build/validate and deploy to static hosting"
+      assignedto ref agent DevOpsEngineerAgent
+      issuestatus open
+      priority medium
+
+      def task CreateCIConfig
+        name "Create CI Config"
+        description "Add pipeline to validate Sylang files and deploy web assets"
+        assignedto ref agent DevOpsEngineerAgent
+        issuestatus open
+        priority medium
+        points "3"
+        outputfile ".github/workflows/deploy.yml"
+
+      def task ConfigureStaticHosting
+        name "Configure Static Hosting"
+        description "Document steps for hosting on GitHub Pages/Netlify/Vercel"
+        assignedto ref agent DevOpsEngineerAgent
+        issuestatus open
+        priority low
+        points "2"
+        outputfile "docs/Deployment/Hosting.md"
+
+    def story ReleaseDocs
+      name "Release Documentation"
+      description "Provide README and changelog for the project"
+      assignedto ref agent ProductManagerAgent
+      issuestatus open
+      priority low
+
+      def task PrepareREADME
+        name "Prepare README"
+        description "Write project overview, how to run, and limitations"
+        assignedto ref agent ProductManagerAgent
+        issuestatus open
+        priority low
+        points "2"
+        outputfile "README.md"
+
+      def task WriteChangelog
+        name "Write Changelog"
+        description "Track changes and release notes"
+        assignedto ref agent ProductManagerAgent
+        issuestatus open
+        priority low
+        points "1"
+        outputfile "docs/Release/CHANGELOG.md"

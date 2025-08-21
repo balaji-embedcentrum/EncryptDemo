@@ -1,0 +1,82 @@
+use functionset EncryptionWebAppFunctions
+
+hdef usecase EncryptionWebApp
+  name "Encryption Web Application"
+  description "Web-based text encryption application with client-side cryptography and secure user interface"
+  owner "Product Engineering Team"
+  tags "encryption", "web-app", "client-side-crypto", "security"
+
+  def actor EndUser
+    name "End User"
+    description "Primary user who encrypts text using the web application"
+    owner "User Experience Team"
+    tags "primary-user", "encryption", "text-processing"
+    actortype primary
+    associated ref function ProcessUserInput
+      includes ref function ValidateTextInput
+      associated ref function GenerateCryptographicKey
+        associated ref function EncryptText
+          associated ref function FormatEncryptedOutput
+            associated ref function DisplayEncryptedResult
+              includes ref function CopyToClipboardFunction
+      includes ref function HandleEncryptionError
+    associated ref function InitializeUserInterface
+
+  def actor SecurityAuditor
+    name "Security Auditor"
+    description "Security professional who reviews and validates encryption implementation"
+    owner "Security Team"
+    tags "security", "audit", "validation", "compliance"
+    actortype primary
+    associated ref function ValidateTextInput
+    associated ref function GenerateCryptographicKey
+    associated ref function EncryptText
+    associated ref function HandleEncryptionError
+    associated ref function ClearSensitiveData
+
+  def actor SystemAdministrator
+    name "System Administrator"
+    description "Administrator responsible for application deployment and maintenance"
+    owner "Systems Engineering Team"
+    tags "admin", "deployment", "maintenance", "system"
+    actortype primary
+    associated ref function InitializeUserInterface
+    associated ref function HandleEncryptionError
+    associated ref function ProcessUserInput
+
+  def actor WebBrowser
+    name "Web Browser"
+    description "Browser environment that executes the encryption application"
+    owner "Platform Team"
+    tags "browser", "web-crypto-api", "javascript", "runtime"
+    actortype secondary
+    associated ref function GenerateCryptographicKey
+    associated ref function EncryptText
+    associated ref function CopyToClipboardFunction
+    associated ref function InitializeUserInterface
+
+  def actor WebCryptoAPI
+    name "Web Crypto API"
+    description "Browser's cryptographic API for secure key generation and encryption operations"
+    owner "Browser Vendor"
+    tags "crypto-api", "aes-gcm", "key-generation", "encryption"
+    actortype secondary
+    associated ref function GenerateCryptographicKey
+    associated ref function EncryptText
+
+  def actor SystemClipboard
+    name "System Clipboard"
+    description "Operating system clipboard service for copy operations"
+    owner "Operating System"
+    tags "clipboard", "copy", "system-service"
+    actortype secondary
+    associated ref function CopyToClipboardFunction
+
+  def actor MemoryManager
+    name "Memory Manager"
+    description "System memory management for secure data handling"
+    owner "Runtime Environment"
+    tags "memory", "security", "cleanup", "data-protection"
+    actortype secondary
+    associated ref function GenerateCryptographicKey
+    associated ref function EncryptText

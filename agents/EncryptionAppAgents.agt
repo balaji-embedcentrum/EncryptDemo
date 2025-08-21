@@ -1,0 +1,68 @@
+hdef agentset EncryptionAppAgents
+  name "Encryption Web App Project Agents"
+  description "Agents to design, document, implement, and validate a simple web app that encrypts a user-provided string"
+  owner "User"
+
+  def agent ProductManagerAgent
+    name "Product Manager Agent"
+    description "Defines scope, success criteria, and delivery plan for the encryption web app"
+    role "Product Manager"
+    specialization "Scope Definition and Delivery Planning"
+    expertise "Roadmapping", "Backlog management", "Acceptance criteria", "Prioritization"
+    context "One-page tools", "Rapid delivery", "Stakeholder alignment"
+
+  def agent SystemsEngineerAgent
+    name "Systems Engineering Agent"
+    description "Structures the solution, decomposes capabilities, and orchestrates Sylang artifacts across .ple/.fml/.fun/.blk/.req/.tst/.spr"
+    role "Systems Engineer"
+    specialization "Architecture and Model-Based Systems Engineering"
+    expertise "System decomposition", "Traceability", "Configuration management", "Sylang modeling"
+    context "MBSE", "Small web utilities", "Documentation-first workflows"
+
+  def agent RequirementsEngineerAgent
+    name "Requirements Engineering Agent"
+    description "Captures functional and non-functional requirements, including encryption behavior and usability"
+    role "Requirements Engineer"
+    specialization "Requirements Authoring and Traceability"
+    expertise "User stories", "Functional requirements", "Quality attributes", "Regulatory awareness"
+    context "Lightweight apps", "Security-minded features", "Traceable specs"
+
+  def agent SecurityEngineerAgent
+    name "Security Engineering Agent"
+    description "Chooses safe-in-browser encryption approaches and reviews crypto usage"
+    role "Security Engineer"
+    specialization "Applied Cryptography for Frontend"
+    expertise "Web Crypto API", "Key management", "Threat modeling", "Input validation"
+    context "Client-side crypto", "Modern browsers", "Best practices"
+
+  def agent FrontendEngineerAgent
+    name "Frontend Engineering Agent"
+    description "Implements the UI and logic using HTML, JavaScript, and Tailwind CSS"
+    role "Frontend Engineer"
+    specialization "Single-Page UI Implementation"
+    expertise "HTML", "JavaScript", "Tailwind CSS", "Accessibility", "Responsive design"
+    context "Static hosting", "Zero-backend MVPs", "Fast iteration"
+
+  def agent UIUXDesignerAgent
+    name "UI/UX Designer Agent"
+    description "Designs a minimal, accessible, and intuitive UI for entering and viewing encrypted text"
+    role "UI/UX Designer"
+    specialization "Interaction and Visual Design"
+    expertise "Wireframing", "Design systems", "A11y", "Microcopy"
+    context "Form-first experiences", "Low-friction flows", "Mobile-first"
+
+  def agent TestEngineerAgent
+    name "Test Engineering Agent"
+    description "Defines and automates tests that validate requirements and crypto behavior"
+    role "Test Engineer"
+    specialization "System and UI Testing"
+    expertise "Test case design", "Traceability to requirements", "Browser automation"
+    context "Unit and system tests", "Deterministic vectors", "Cross-browser checks"
+
+  def agent DevOpsEngineerAgent
+    name "DevOps Engineer Agent"
+    description "Handles tooling, CI, and static hosting for the web app"
+    role "DevOps Engineer"
+    specialization "Lightweight CI/CD and Static Hosting"
+    expertise "CI pipelines", "Artifact versioning", "Static site deployment"
+    context "GitHub Pages/Netlify/Vercel", "Small-team workflows", "Infra as code (light)"

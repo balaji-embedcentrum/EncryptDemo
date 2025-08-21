@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption Tool</title>
+    
+    <!-- Tailwind CSS CDN - Implements Feature: Styling (EncryptionWebApp.fml line 71) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Security Headers Implementation - Per ThreatModel.md mitigations -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
+    <!-- Cache Control - Per ThreatModel.md T-INFO-03 mitigation -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body class="bg-gray-50 min-h-screen py-8">
+    <!-- Main Container - Implements Feature: UserInterface (EncryptionWebApp.fml line 54) -->
+    <div class="max-w-4xl mx-auto px-4">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Text Encryption Tool</h1>
+            <p class="text-gray-600">Secure client-side text encryption using AES-GCM</p>
+            <!-- Security Warning - Per ThreatModel.md user education -->
+            <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p class="text-sm text-yellow-800">
+                    ⚠️ <strong>Security Notice:</strong> This tool performs encryption in your browser. 
+                    Avoid using on shared computers and be aware of clipboard security risks.
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Application Interface -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <!-- Input Section - Implements Feature: InputForm (EncryptionWebApp.fml line 60) -->
+            <div class="mb-6">
+                <label for="inputText" class="block text-sm font-medium text-gray-700 mb-2">
+                    Enter Text to Encrypt
+                </label>
+                <!-- Text Input - Implements Feature: TextInput (EncryptionWebApp.fml line 27) -->
+                <!-- Follows Requirement: REQ_FUNC_001 (EncryptionRequirements.req line 17) -->
+                <textarea 
+                    id="inputText" 
+                    class="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    placeholder="Enter your text here (maximum 10,000 characters)..."
+                    maxlength="10000"
+                    autocomplete="off"
+                    spellcheck="false"
+                ></textarea>
+                
+                <!-- Character Counter - Implements Input Validation (InputValidation.md) -->
+                <div class="flex justify-between items-center mt-2">
+                    <span id="charCount" class="text-sm text-gray-500">0 / 10,000 characters</span>
+                    <span id="validationStatus" class="text-sm"></span>
+                </div>
+            </div>
+
+            <!-- Action Buttons Section -->
+            <div class="mb-6 flex flex-wrap gap-4">
+                <!-- Encrypt Button - Implements Function: ProcessUserInput (EncryptionFunctions.fun line 79) -->
+                <button 
+                    id="encryptBtn" 
+                    class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                    disabled
+                >
+                    🔒 Encrypt Text
+                </button>
+                
+                <!-- Clear Button -->
+                <button 
+                    id="clearBtn" 
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                >
+                    🗑️ Clear All
+                </button>
+            </div>
+
+            <!-- Output Section - Implements Feature: OutputDisplay (EncryptionWebApp.fml line 65) -->
+            <div class="mb-6">
+                <label for="outputText" class="block text-sm font-medium text-gray-700 mb-2">
+                    Encrypted Output
+                </label>
+                <!-- Output Display - Implements Feature: OutputFormatting (EncryptionWebApp.fml line 49) -->
+                <!-- Follows Requirement: REQ_FUNC_003 (EncryptionRequirements.req line 93) -->
+                <textarea 
+                    id="outputText" 
+                    class="w-full h-32 p-3 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm resize-none"
+                    placeholder="Encrypted text will appear here..."
+                    readonly
+                ></textarea>
+                
+                <!-- Copy to Clipboard Button - Implements Feature: CopyToClipboard (EncryptionWebApp.fml line 75) -->
+                <!-- When config c_UserInterface_CopyToClipboard is enabled (EncryptionWebAppConfig.vcf line 21) -->
+                <div class="mt-2 flex justify-between items-center">
+                    <button 
+                        id="copyBtn" 
+                        class="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
+                        disabled
+                    >
+                        📋 Copy to Clipboard
+                    </button>
+                    <span id="copyStatus" class="text-sm"></span>
+                </div>
+            </div>
+
+            <!-- Status and Error Display Section -->
+            <!-- Implements Feature: ErrorHandling (EncryptionWebApp.fml line 98) -->
+            <!-- Follows Requirement: REQ_FUNC_004 (EncryptionRequirements.req line 102) -->
+            <div id="statusArea" class="hidden">
+                <div id="errorMessage" class="p-4 rounded-lg mb-4 hidden">
+                    <span id="errorText"></span>
+                </div>
+                <div id="successMessage" class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4 hidden">
+                    <span id="successText"></span>
+                </div>
+            </div>
+
+            <!-- Processing Indicator - Implements Requirement: REQ_USAB_001 (EncryptionRequirements.req line 111) -->
+            <div id="processingIndicator" class="hidden">
+                <div class="flex items-center justify-center p-4">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
+                    <span class="text-blue-600">Encrypting your text...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-900 mb-3">🔐 How This Works</h3>
+            <div class="text-sm text-blue-800 space-y-2">
+                <!-- Technical Details - References CryptoDecision.md -->
+                <p><strong>Algorithm:</strong> AES-GCM 256-bit encryption (as per CryptoDecision.md)</p>
+                <p><strong>Key Generation:</strong> New random key for each encryption using Web Crypto API</p>
+                <p><strong>Security:</strong> Client-side only - your text never leaves your browser</p>
+                <p><strong>Output Format:</strong> Base64 encoded (IV + Ciphertext + AuthTag)</p>
+                
+                <!-- Security Warnings - Per ThreatModel.md recommendations -->
+                <div class="mt-4 p-3 bg-blue-100 rounded">
+                    <p class="font-medium mb-1">⚠️ Security Considerations:</p>
+                    <ul class="list-disc list-inside space-y-1 text-xs">
+                        <li>Keys are generated fresh for each encryption and not stored</li>
+                        <li>Use private/incognito browsing for sensitive content</li>
+                        <li>Be aware that clipboard content may be accessible to other applications</li>
+                        <li>Avoid using on shared or public computers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center text-sm text-gray-500">
+            <p>Built with Web Crypto API and Tailwind CSS</p>
+            <p class="mt-1">
+                Implementation follows: 
+                <span class="font-mono">EncryptionWebApp.fml</span>, 
+                <span class="font-mono">EncryptionRequirements.req</span>, 
+                <span class="font-mono">EncryptionFunctions.fun</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <!-- Implements all functions defined in EncryptionFunctions.fun -->
+    <script src="app.js"></script>
+</body>
+</html>
+

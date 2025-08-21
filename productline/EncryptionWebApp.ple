@@ -1,0 +1,10 @@
+hdef productline EncryptionWebAppProductLine
+  name "Encryption Web Application Product Line"
+  description "Simple web-based text encryption utility product line for secure client-side string transformation using modern browser cryptographic APIs"
+  owner "Development Team"
+  domain "web-applications", "cryptography", "client-side-security", "utilities"
+  compliance "OWASP Web Security", "Modern Browser Standards", "Accessibility Guidelines"
+  firstrelease "2025-08-15"
+  tags "encryption", "web-crypto-api", "javascript", "tailwind-css", "single-page-app"
+  safetylevel ASIL-A
+  region "Global", "Web-Based"

@@ -1,0 +1,148 @@
+// EncryptionWebApp_v2.seq - Encryption Web Application Sequence (v2.18.38 syntax)
+use functionset EncryptionWebAppFunctions
+use configset EncryptionWebAppFeaturesVariantsConfig
+
+hdef sequenceset EncryptionWebAppSequenceV2
+  name "Encryption Web App Sequence V2"
+  description "Complete text encryption workflow with user interface interactions and security operations using updated v2.18.38 syntax"
+  owner "Systems Engineering Team"
+  tags "encryption", "web-app", "crypto-operations", "user-workflow", "v2-syntax"
+  safetylevel ASIL-B
+
+  // Main encryption workflow sequence
+  def sequence SEQ_001
+    from ref block UserInterface
+    to ref block InputValidator
+    flow ref message TextInputRequest
+    
+  def sequence SEQ_002
+    from ref block InputValidator
+    to ref block InputValidator
+    flow ref message InputValidationResult
+    when ref config c_CoreEncryption_TextInput
+    
+  // Conditional validation result - valid input path
+  def fragment ValidInputDetected
+    name "Valid Input Processing"
+    description "Process valid user input through encryption pipeline"
+    fragmenttype alt
+    condition "input_validation_passed"
+    
+    def sequence SEQ_003
+      from ref block InputValidator
+      to ref block KeyManager
+      flow ref message KeyGenerationRequest
+      
+    def sequence SEQ_004
+      from ref block KeyManager
+      to ref block CryptographicEngine
+      flow ref message KeyGeneratedAck
+      
+    def sequence SEQ_005
+      from ref block CryptographicEngine
+      to ref block CryptographicEngine
+      flow ref message EncryptionComplete
+      
+    def sequence SEQ_006
+      from ref block CryptographicEngine
+      to ref block OutputFormatter
+      flow ref message FormatOutputRequest
+      
+    def sequence SEQ_007
+      from ref block OutputFormatter
+      to ref block UserInterface
+      flow ref message DisplayEncryptedResult
+
+      def sequence SEQ_0071
+        from ref block OutputFormatter
+        to ref block UserInterface
+        flow ref message DisplayEncryptedResultCopy
+      
+    // Optional clipboard operation
+    def fragment ClipboardCopyRequested
+      name "Copy to Clipboard Operation"
+      description "Copy encrypted text to system clipboard"
+      fragmenttype alt
+      condition "copy_to_clipboard_requested"
+      
+      def sequence SEQ_008
+        from ref block UserInterface
+        to ref block ClipboardManager
+        flow ref message CopyToClipboardRequest
+        
+      def sequence SEQ_009
+        from ref block ClipboardManager
+        to ref block UserInterface
+        flow ref message ClipboardCopyAck
+        
+    // Secure cleanup operations
+    def sequence SEQ_010
+      from ref block CryptographicEngine
+      to ref block MemoryManager
+      flow ref message ClearSensitiveData
+      
+    def sequence SEQ_011
+      from ref block MemoryManager
+      to ref block CryptographicEngine
+      flow ref message DataClearedAck
+
+  // Invalid input handling path
+  def fragment InvalidInputDetected
+    name "Invalid Input Handling"
+    description "Handle invalid or malicious input"
+    fragmenttype else
+    
+    def sequence SEQ_012
+      from ref block InputValidator
+      to ref block ErrorHandler
+      flow ref message HandleEncryptionError
+      
+    def sequence SEQ_013
+      from ref block ErrorHandler
+      to ref block UserInterface
+      flow ref message DisplayErrorMessage
+
+  // Parallel error monitoring (runs throughout operation)
+  def fragment ContinuousErrorMonitoring
+    name "Continuous Error Monitoring"
+    description "Monitor system health and handle runtime errors"
+    fragmenttype parallel
+    condition "All monitoring systems must run concurrently"
+    
+    def sequence SEQ_014
+      from ref block ErrorHandler
+      to ref block CryptographicEngine
+      flow ref signal MonitorCryptoOperations
+      
+    def sequence SEQ_015
+      from ref block ErrorHandler
+      to ref block MemoryManager
+      flow ref signal MonitorMemoryUsage
+      
+    def sequence SEQ_016
+      from ref block ErrorHandler
+      to ref block UserInterface
+      flow ref signal MonitorUIInteractions
+
+  // Session cleanup sequence
+  def fragment SessionCleanup
+    name "Session Cleanup"
+    description "Clean up resources at end of session"
+    fragmenttype alt
+    condition "session_ending"
+    
+    def sequence SEQ_017
+      from ref block MemoryManager
+      to ref block MemoryManager
+      flow ref message FinalMemoryCleanup
+      
+    def sequence SEQ_018
+      from ref block UserInterface
+      to ref block UserInterface
+      flow ref message ResetUIState
+
+  // Application initialization sequence
+  def sequence SEQ_019
+    from ref block UserInterface
+    to ref block UserInterface
+    flow ref message InitializeUserInterface

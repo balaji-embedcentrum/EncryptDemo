@@ -1,0 +1,31 @@
+use featureset EncryptionWebAppFeatures
+
+hdef variantset EncryptionWebAppFeaturesVariants_1
+  name "EncryptionWebAppFeatures Variant Model"
+  description "Configuration variants for encryptionwebappfeatures product family"
+  owner "Product Line Engineering"
+  tags "variants", "configuration", "product-family"
+
+  extends ref feature CoreEncryption mandatory selected
+    extends ref feature TextInput mandatory selected
+    extends ref feature CryptographicEngine mandatory selected
+      extends ref feature AESEncryption mandatory selected
+      extends ref feature KeyManagement mandatory selected
+    extends ref feature OutputFormatting mandatory selected
+  extends ref feature UserInterface mandatory selected
+    extends ref feature InputForm mandatory selected
+    extends ref feature OutputDisplay mandatory selected
+    extends ref feature Styling mandatory selected
+    extends ref feature CopyToClipboard optional
+  extends ref feature SecurityFeatures mandatory selected
+    extends ref feature InputValidation mandatory selected
+    extends ref feature ErrorHandling mandatory selected
+    extends ref feature SecureMemoryHandling optional
+  extends ref feature Accessibility optional selected
+    extends ref feature KeyboardNavigation optional selected
+    extends ref feature ScreenReaderSupport optional
+
+// TODO: Configure feature selections for your specific variant
+// - Change 'optional' to 'selected' for features you want included
+// - Maintain proper indentation hierarchy
+// - Ensure parent-child relationships are preserved

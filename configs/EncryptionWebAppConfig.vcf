@@ -1,0 +1,28 @@
+use variantset EncryptionWebAppFeaturesVariants
+
+hdef configset EncryptionWebAppFeaturesVariantsConfig
+  name "EncryptionWebAppFeaturesVariants Configuration Set"
+  description "Auto-generated configuration from EncryptionWebAppVariants.vml variant model selections"
+  owner "Product Engineering"
+  generatedfrom ref variantset EncryptionWebAppFeaturesVariants
+  generatedat "2025-08-12T10:30:00.000Z"
+  tags "variant", "config", "auto-generated"
+
+  def config c_CoreEncryption 1
+  def config c_CoreEncryption_TextInput 1
+  def config c_CoreEncryption_CryptographicEngine 1
+  def config c_CoreEncryption_CryptographicEngine_AESEncryption 1
+  def config c_CoreEncryption_CryptographicEngine_KeyManagement 1
+  def config c_CoreEncryption_OutputFormatting 1
+  def config c_UserInterface 1
+  def config c_UserInterface_InputForm 1
+  def config c_UserInterface_OutputDisplay 1
+  def config c_UserInterface_Styling 1
+  def config c_UserInterface_CopyToClipboard 1
+  def config c_SecurityFeatures 1
+  def config c_SecurityFeatures_InputValidation 1
+  def config c_SecurityFeatures_ErrorHandling 1
+  def config c_SecurityFeatures_SecureMemoryHandling 0
+  def config c_Accessibility 0
+  def config c_Accessibility_KeyboardNavigation 0
+  def config c_Accessibility_ScreenReaderSupport 0
